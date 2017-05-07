@@ -1,0 +1,242 @@
+% http://www.texample.net/tikz/examples/power-electronics-rectifier/
+% Example 4-7, p. 135 of Hart, discontinuous current in full-wave rect
+\begin{tikzpicture}
+  \begin{scope}[xscale=1,yscale=1.5]
+    \newcommand{\alphaa}{60 * pi / 180}
+    \newcommand{\betaa}{216 * pi / 180}
+
+    \draw[thin, ->] (-0.2, 0) -- (14,0) node[right] {$\omega t$};
+
+    \foreach \x/\xtext in {0,{pi}/\pi,
+      {2*pi}/{2\pi},{3*pi}/{3\pi}}
+    \draw (\x,0.1) -- (\x,-0.1) node [below] {$\xtext$};
+    \draw (\betaa,-0.1) -- (\betaa,0.1) node [above] {$\beta$};
+
+
+    % Vs
+    \draw[domain=0:14, help lines, smooth]
+    plot (\x,{sin(\x r)});
+
+    % Vo and Io
+    \foreach \qq [evaluate=\qq as \qqshft using \qq*2*pi] in {0,...,1}
+     {
+      \begin{scope}[xshift=\qqshft cm,
+          every path/.style={ultra thick, color=red}]
+        %Vo
+
+        \draw[domain=pi/6+pi/24:{pi/2 + pi/12}]
+        plot(\x,{sin(\x r)})
+        [domain={pi/2 + pi/12}:2*pi+pi/6+pi/24]
+        plot(\x,{1.17*exp(\x*(-0.1))});
+        \draw
+        [domain=0:pi + pi/6+pi/24]
+        plot(\x,{-0.83*exp(\x*(-0.1))})
+        [domain=pi + pi/6+pi/24:{pi + pi/2 + pi/12}]
+            plot(\x,{sin(\x r)})
+            [domain={pi + pi/2 + pi/12}:2*pi]
+            plot(\x,{-1.75*exp(\x*(-0.12))})
+            ;
+       \end{scope}
+     }
+     \node[right,color=red] at ({pi/2+pi/12},1.05) {$u_{C1}$};
+     \node[right,color=red] at ({pi+pi/2+pi/12},-1.05) {$u_{C2}$};
+  \end{scope}
+  \end{tikzpicture}
+
+\begin{figure}[H]
+  \begin{circuitikz}\draw
+    (1,0) to[R,l_={$R_{\textcyrillic{н}}$}] ++ (3,0)
+    -- ++ (0,1)
+    to[C,l={$C_2$}, *-*] ++ (-3,0)
+    -- ++ (0,-1)
+    (4,4) to[C,l=$C_1$,v=$U$,color=red] ++ (-3,0)
+    (4,4) to[Ty,l=$VD_2$] ++ (0,-3)
+    (1,1) to[Ty,l=$VD_1$,v=$ $,color=red,*-*] (4,4)
+    (1,1) to[short,-o] ++ (-1,0)
+    node[anchor=east] {+}
+    (1,4) to[short,-o] ++ (-1,0)
+    node[anchor=east] {-}
+    ;\end{circuitikz}
+\end{figure}
+
+При $-$ $+$ на входе конденсатор $C_1$ зарядится $-$ $С_1$ $+$.
+При подаче напряжения на $VD_1$
+\begin{circuitikz}\draw
+  (0,0) to[Ty,l=$VD_1$] (0,2)
+  to[short,v=$ $] ++ (0,-2)
+  ;\end{circuitikz}
+ откроется $VD_2$
+\begin{circuitikz}\draw
+  (0,2) to[Ty,l=$VD_2$,v=$ $] (0,0)
+%  to[short,v=$ $] ++ (0,-2)
+    ;\end{circuitikz}
+ 
+
+\begin{figure}[H]
+  \begin{circuitikz}\draw
+    (1,0) to[R,l_={$R_{\textcyrillic{н}}$}] ++ (3,0)
+    -- ++ (0,1)
+    to[C,l={$C_2$},color=red, *-*] ++ (-3,0)
+    -- ++ (0,-1)
+    (4,4) to[C,l=$C_1$,v=$U$] ++ (-3,0)
+    (4,4) to[Ty,l=$VD_2$,v=$2U$,color=red] ++ (0,-3)
+    (1,1) to[Ty,l=$VD_1$,*-*] (4,4)
+    (1,1) to[short,-o] ++ (-1,0)
+    node[anchor=east] {-}
+    (1,4) to[short,-o] ++ (-1,0)
+    node[anchor=east] {+}
+    ;\end{circuitikz}
+\end{figure}
+
+За несколько периодов напряжения сети если пренебрегать
+$R_{\textcyrillic{н}}$ конденсатор $C_1$ зарядится до амлитулы $U$,
+а конденсатор $C_2$ до двух амплитуд $2U$.
+
+\subsection{вариант схема умножения}
+
+\begin{figure}[H]
+  \begin{circuitikz}\draw
+%    (1,0) to[R,l_={$R_{\textcyrillic{н}}$}] ++ (3,0)
+%    -- ++ (0,1)
+    (4,1) to[C,l={$C_2$}, *-*] ++ (-3,0)
+%    -- ++ (0,-1)
+    (4,4) to[C,l=$C_1$] ++ (-3,0)
+    (4,4) to[Ty,l=$VD_2$] ++ (0,-3)
+    (1,1) to[Ty,l=$VD_1$,mirror,*-*] (4,4)
+    (1,1) to[short,-o] ++ (-1,0)
+    node[anchor=east] {-}
+    (1,4) to[short,-o] ++ (-1,0)
+    node[anchor=east] {+}
+    (4,4) to[C,l=$C_3$] ++ (3,0)
+    (4,1) to[Ty,l=$VD_3$,mirror] ++ (3,3)
+    to[Ty,l=$VD_4$,*-*] ++ (0,-3)
+    to[C,l=$C_4$] ++ (-3,0)
+    (7,4) to[C,l=$C_5$] ++ (3,0)
+    (7,1) to[Ty,l=$VD_5$,mirror] ++ (3,3)
+    to[Ty,l=$VD_6$,*-] ++ (0,-3)
+    to[C,l=$C_6$] ++ (-3,0)   
+    ;\end{circuitikz}
+\end{figure}
+
+Конденсатор $C_1$ заряжается на положительных полупериодах порциями.
+На верхних конденсаторах $C_1$, $C_3$, $C_5$, ... нечётные напряжения
+$U$, $3U$, $5U$. На нижних конденсаторах $C_2$, $C_4$, $C_6$, ... нечётные напряжения $2U$, $4U$, $6U$. Таким способом в середине прошлого века получали
+наряжение в 1 миллион вольт, полтора миллиона вольт.
+Получали 2 миллиона -- была построена линия постоянного тока
+Экибастуз-Москва. Несколько миллионов можно было получить.
+
+В первых цветных телевизорах напряжение анод-катод было 25kV. Получали это
+напряжение выпрямлением на электровакуумном приборе. Для этого применялся
+импульсный трансформатор строчной развертки. Горели строчные трансформаторы
+из-за межвитковых замыканий.
+Перешли на схему Латура -- пожары прекратились.
+
+Требуется высокое напряжение и малый ток. Газоочистка в трубах
+требует высокое напряжение. Сажа притягивается как лохмотья бумажки
+притягиваются к расчёстке.
+
+Пример практического применения выпрямителей.
+
+$7\times\underbrace{220\cdot\sqrt{2}}_{283} \approx 1700,1800V$ 
+$10\times 283 = 2830V$
+
+Можно ещё одну схему нарисовать. Её почему-то в учебниках не приводят
+
+\begin{figure}[H]
+  \begin{circuitikz}\draw
+    (3,0) to[C] ++ (-3,0)
+    to[Do] ++ (0,3)
+    to[C,*-] ++ (3,0)
+    (3,0) to[Do] ++ (-3,3)
+    -- ++ (0,-3)
+    (3,0) to[Do,*-] ++ (-3,3)
+    (3,0) -- ++ (-3,3)
+    %
+    (6,0) to[C] ++ (-3,0)
+    to[Do] ++ (0,3)
+    to[C,*-o] ++ (3,0)
+    (6,0) to[Do] ++ (-3,3)
+    -- ++ (0,-3)
+    (6,0) to[Do,o-] ++ (-3,3)
+    (6,0) -- ++ (-3,3)
+    %
+    (6,0) to[Do] ++ (3,3)
+    to[Do,-*] ++ (0,-3)
+    to[C] ++ (-3,0)
+    -- ++ (3,3)
+    to[C] ++ (-3,0)
+    (9,0) -- ++ (0,3)
+    %
+    (9,0) to[Do] ++ (3,3)
+    to[Do,-*] ++ (0,-3)
+    to[C] ++ (-3,0)
+    -- ++ (3,3)
+    to[C] ++ (-3,0)
+    (12,0) -- ++ (0,3)
+    ;\end{circuitikz}
+\end{figure}
+
+Эта схема как бы двухполупериодная. Частота пульсаций 100Гц, а не 50Гц.
+
+\begin{figure}[H]
+  \begin{circuitikz}\draw
+    (3,0) to[Do, o-] ++ (-3,3)
+    to[C,-o] ++ (3,0)
+    to[C] ++ (3,0)
+    -- ++ (-3,-3)
+    to[Do] ++ (3,3)
+    (3,0) -- ++ (-3,3)
+    ;\end{circuitikz}
+\end{figure}
+Получили схему Латура.
+
+До сих пор не писали математических соотношений. В Качестве основной схемы рассмотрим
+m-фазную ``нулевую'' схему. Минимум $m=2$. Всегда должна быть предыдущая и последующая фазы.
+Также всегда должны быть первая и последняя фазы.
+
+\begin{figure}[H]
+  \begin{circuitikz}\draw
+    (0,5) -- ++ (0.5,0)
+    (0,5) to[L,l=$e_1$] ++ (0,-2)
+    to[Ty,l=$\!V_1$] ++ (0,-2)
+    -- ++ (0,-1)
+    -- ++ (0.5,0)    
+    %
+    (1.2,5) to[short,-*] ++ (0.5,0)
+    to[short,-*] ++ (1.4,0)
+    (1.7,5) to[L,l=$e_k$] ++ (0,-2)
+    to[Ty,l=$\!V_k$] ++ (0,-2)
+    to[short,-*] ++ (0,-1)
+    -- ++ (0.8,0)
+    (1.2,0) to[short] ++ (0.9,0)
+    %
+    (3.1,5) -- ++ (0.5,0)
+    (3.1,5) to[L,l=$e_{k+1}$] ++ (0,-2)
+    to[Ty,l=$\!V_{k+1}$] ++ (0,-2)
+    to[short,-*] ++ (0,-1)
+    -- ++ (0.5,0)
+    (2.5,0) to[short] ++ (0.5,0)
+    %
+    (5,5) to[L,l=$e_m$] ++ (0,-2)
+    to[Ty,l=$\!V_m$] ++ (0,-2)
+    -- ++ (0,-1)
+%    -- ++ (0.5,0)
+    (4.5,0) to[short,-*] ++ (0.5,0)
+    %
+    -- ++ (1,0)
+    to[L,l=$L_\Phi\;R_\Phi$] ++ (2,0)
+    to[short] ++ (1,0)
+    %
+    to[battery1,l=$E_{\textcyrillic{н}}$] ++ (0,2)
+    to[L] ++ (0,1)
+    to[R,l=$R_{\textcyrillic{н}}$] ++ (0,2)
+    %
+    to[short,-*] ++ (-4,0)
+    -- ++ (-0.5,0) 
+    ;\end{circuitikz}
+\end{figure}
+
+
+
+
+

@@ -1,0 +1,425 @@
+\begin{tikzpicture}
+  \begin{scope}[xscale=3.5,yscale=4.5]
+    \newcommand{\alphaa}{26.0 * pi / 180}
+    \newcommand{\gammaa}{21.0 * pi / 180}
+    \newcommand{\betamax}{165/180*pi}
+
+    \draw[thin, ->] (0, 0) -- (3.5,0) node[right] {$\alpha$};
+    \draw[thin, ->] (0,-1.2) -- (0,1.3) node[left]
+         {${\displaystyle \frac{U_d}{E_{d0}}}$}
+     node[right] {${\displaystyle \approx\frac{E_d}{E_{d0}}}$};
+    \draw[thin,loosely dashed] (0,-1) -- (pi,-1);
+
+    \draw (\betamax,-0.1) -- (\betamax,0.1) node [above] {$165^\circ$};
+    
+    \foreach \x/\xtext in {{pi/6}/{\frac{\pi}{6}}, {pi/3}/{\frac{\pi}{3}},
+      {pi/2}/{\frac{\pi}{2}}, {2*pi/3}/\frac{2\pi}{3},
+      {5*pi/6}/\frac{5\pi}{6},
+      {pi}/{\pi}}
+    \draw (\x,0.1) -- (\x,-0.1) node [below] {$\xtext$};
+
+    \foreach \y/\ytext in {-1/-1,-0.5/-0.5,0.5/0.5,1,1}
+    \draw (0.1,\y) -- (-0.1,\y) node [left] {$\ytext$};
+
+    % A
+    \draw[domain=0:\betamax, help lines, smooth]
+    plot (\x,{cos((\x) r)});
+    % нижняя граница
+    \draw[domain=0:{pi-(23/180)*pi}, help lines, smooth,dashed]
+    plot (\x,{cos((\x) r) - 0.08});
+    %
+    %m=2
+    \draw[domain=0:\betamax, help lines, smooth]
+    plot (\x, {(1-sin((\x-pi/2) r))/2/sin((pi/2) r)});
+    %m=3
+    \draw[domain={pi/2-pi/3}:{pi/2+pi/3}, help lines, smooth]
+    plot (\x, {(1-sin((\x-pi/3) r))/2/sin((pi/3) r)});
+    %m=6
+    \draw[domain={pi/2-pi/6}:{pi/2+pi/6}, help lines, smooth]
+    plot (\x, {(1-sin((\x-pi/6) r))/2/sin((pi/6) r)});
+    %m=12
+    \draw[domain={pi/2-pi/12}:{pi/2+pi/12}, help lines, smooth]
+    plot (\x, {(1-sin((\x-pi/12) r))/2/sin((pi/12) r)});
+    %
+    \draw[thin] ({pi/2+0.1}, {(1-sin(((pi/2+0.1)-pi/12) r))/2/sin((pi/12) r)})
+    -- (2*pi/3+0.4, 0.4) node[right] {m=12};
+    \draw[thin] ({pi/2+0.05}, {(1-sin(((pi/2+0.05)-pi/6) r))/2/sin((pi/6) r)})
+    -- (2*pi/3+0.3, 0.47) node[right] {m=6};
+    \draw[thin] ({pi/2}, {(1-sin(((pi/2)-pi/3) r))/2/sin((pi/3) r)})
+    -- (2*pi/3, 0.54) node[right] {m=3};
+    \draw[thin] ({pi/2-0.05}, {(1-sin(((pi/2-0.05)-pi/2) r))/2/sin((pi/2) r)})
+    -- (2*pi/3-0.3, 0.68) node[right] {m=2};
+    \draw[thin] ({pi/2},0) -- ({(pi/3+pi/2)/2},-0.35) node[below] {$m=\infty$};
+    %        
+    %
+    \node[below] at ({pi/6},0.45)
+              {$\begin{array}{c}
+                  \textcyrillic{выпрямительный}\\
+                  \textcyrillic{режим}
+                \end{array}$
+              };
+%    \node[below] at ({5*pi/6},-0.3)
+%                   {$\begin{array}{c}
+%                       \textcyrillic{инверторный}\\
+%                       \textcyrillic{режим}
+%                     \end{array}$
+              %                   };
+              
+      \draw[thin,<-] (5*pi/6-0.1,-0.8) -- (5*pi/6-0.5,-0.9)
+      node[left]  {$I_d\approx 0$};
+      \draw[thin] (pi,-0.2) -- (pi,-0.4);
+      \draw[thin] (\betamax,-0.15) -- (\betamax,-0.4);
+      \draw[thin,<->] (\betamax,-0.35) -- (pi,-0.35) node[right] {$\beta_{max}$};
+  \end{scope}
+\end{tikzpicture}
+
+Если ${\displaystyle \alpha<\frac{\pi}{2} - \frac{\pi}{m}}$ тогда это непрерывный
+ режим. При $m=2$ прерывистый режим начинается как только $\alpha>0$.
+$$
+\begin{array}{cc}  
+  m=2 & {\displaystyle E_d =\frac{1+cos\alpha}{2}}\\
+  m=3 & {\textcyrillic{до 30}}^\circ{\textcyrillic{ справедлива синусоида, затем }}
+  {\displaystyle E_d = 1-sin(\alpha)}
+\end{array}
+$$
+
+\subsection{Внешние характеристики $\alpha=const$}
+
+\hspace{-1.5cm}
+\begin{tikzpicture}
+  \begin{scope}[xscale=1.5,yscale=3.5]
+    \newcommand{\betamin}{160/180}
+    % axis x,y
+    \draw[thin, ->] (0, 0) -- (8,0) node[right]
+         {${\displaystyle \frac{I_d}{I_{d0}}}$};
+    \draw[thin, ->] (0, -1) -- (0,1.2) node[left]
+         {${\displaystyle \frac{U_d}{E_{d0}} }$};
+         \draw[thin, loosely dashed] (0,-1) -- (8,-1);
+    % ylabel
+    \foreach \y/\ytext in {-1/-1,{-\betamin}/\beta_{min},0/0,1/1}
+    \draw (0.1,\y) -- (-0.1,\y) node[left] {$\ytext$};
+    % \beta_min
+    \draw[thin,loosely dashed] (0, {-\betamin}) -- (8, {-\betamin+0.1});
+    \node at (0.3,-0.4) {$'1-0'$};
+    \draw[thin,<-] ({sqrt(0.49*(1-0.8*0.8))} ,-0.8) -- (-0.5,-0.7) node[left]
+         {$\begin{array}{c}\textcyrillic{режим}\\'1-1'\end{array}$};
+     \draw[thin,<-] (5.5,{3*sqrt(1-5.5*5.5/36)-1}) -- (7,0.4) node[right]
+         {$\begin{array}{c}\textcyrillic{режим}\\'2-2'\end{array}$};
+     \node at (7,-0.4) {$\begin{array}{c}\textcyrillic{режим}\\'3-2'\end{array}$};
+    \node at (1.3,-0.6) {$\begin{array}{c}\textcyrillic{режим}\\'2-1'\end{array}$};
+    % eclipse (1-1)
+    \draw[domain=0:0.7, help lines,dotted, smooth]
+    plot (\x,{sqrt(1-\x*\x/0.49)});
+    \draw[domain=0:0.7, help lines,dotted, smooth]
+    plot (\x,{-sqrt(1-\x*\x/0.49)});
+    %ellipse (2-2)
+    \draw[domain=4.75:6, help lines,dotted, smooth]
+    plot (\x,{3*sqrt(1-\x*\x/36)-1});
+    %
+% наклон    \draw[thin] (0,1) -- (6,0.8);
+    \draw[thin] (0,1) -- (4.76,1-1/30*4.76);
+    % 0.2/6*180/pi
+    \draw[domain=4.76:6.79, help lines, smooth]
+    plot (\x, {-0.4*\x*\x +2*0.4*4.76*\x + 1 -1/30*4.76 -0.4*4.76*4.76
+    });
+    
+    
+    \node[rotate=-4.45] at (3,1) {$\alpha=0^\circ$};    
+    \draw[thin] ({sqrt(0.49*(1-0.67*0.67))},{0.67-1/30}) -- (5.2, 0.67-1/30*5.2);
+    % рисуем параболу ax^2 + bx + c
+    % выбираем a=1
+    % из f'(x)=0 = 2ax+b => b=-2 a x0
+    % a x0^2 + b x0 + c = y0
+    % a x0^2 -2 a x0^2 +c = y0
+    % c = y0+a x0^2
+    \draw[domain=0:{sqrt(0.49*(1-0.67*0.67))}, help lines, smooth]
+    plot (\x, {\x*\x -2*sqrt(0.49*(1-0.67*0.67))*\x + 0.67 +
+      0.49*(1-0.67*0.67 ) -0.0335
+     });
+    \draw[domain=5.2:6.67, help lines, smooth]
+    plot (\x, {-0.6*\x*\x +2*0.6*5.2*\x + 0.67 -1/30*5.2 -0.6*5.2*5.2
+    });
+    
+    
+    \node[rotate=-4.45] at (3.1,0.67) {$\alpha=30^\circ$};
+    \draw[thin] ({sqrt(0.49*(1-0.33*0.33))},{0.33-1/30}) -- (5.54, 0.33-1/30*5.54);
+    \draw[domain=0:{sqrt(0.49*(1-0.33*0.33))}, help lines, smooth]
+    plot (\x, {1.2*\x*\x -2*1.2*sqrt(0.49*(1-0.33*0.33))*\x + 0.33 +
+      1.2*0.49*(1-0.33*0.33 ) -0.0335
+    });
+    \draw[domain=5.54:6.57, help lines, smooth]
+    plot (\x, {-0.9*\x*\x +2*0.9*5.54*\x + 0.33 -1/30*5.54 -0.9*5.54*5.54
+    });
+    
+       
+    \node[rotate=-4.45] at (3.2,0.33) {$\alpha=60^\circ$};
+    \draw[thin] ( 0.7, {0-1/30})  -- (5.8, -1/30*5.8);
+    \draw[domain=0:{sqrt(0.49*(1-0*0))}, help lines, smooth]
+    plot (\x, {1.4*\x*\x -2*1.4*sqrt(0.49*(1-0.*0.))*\x + 0. +
+      1.4*0.49*(1-0.*0. ) -0.0335
+    });
+    \draw[domain=5.8:6.46, help lines, smooth]
+    plot (\x, {-1.4*\x*\x +2*1.4*5.8*\x  -1/30*5.8 -1.4*5.8*5.8
+                      });
+    
+    \node[rotate=-4.45] at (5.2,-0.1) {$\alpha=90^\circ$};
+    \draw[thin] ({sqrt(0.49*(1-0.33*0.33))},{-0.33-1/30}) -- (5.92, -0.33-1/30*5.92);
+    \draw[domain=0:{sqrt(0.49*(1-0.33*0.33))}, help lines, smooth]
+    plot (\x, {1.8*\x*\x -2*1.8*sqrt(0.49*(1-0.33*0.33))*\x -0.33 +
+      1.8*0.49*(1-0.33*0.33 ) -0.0335
+          });
+    \draw[domain=5.92:6.32, help lines, smooth]
+    plot (\x, {-1.8*\x*\x +2*1.8*5.92*\x  -0.33-1/30*5.92 -1.8*5.92*5.92
+                });
+    \node[rotate=-4.45] at (3.4,-0.33) {$\alpha=120^\circ$};
+
+    
+    \draw[thin] ({sqrt(0.49*(1-0.66*0.66))},{-0.66-1/30}) -- (5,  {-0.66-0.16});
+    \draw[domain=0:{sqrt(0.49*(1-0.67*0.67))}, help lines, smooth]
+    plot (\x, {3*\x*\x -2*3*sqrt(0.49*(1-0.67*0.67))*\x -0.67 +
+      3*0.49*(1-0.67*0.67 ) -0.028
+    });
+    
+
+    \node[rotate=-4.45] at (3.5,-0.66) {$\alpha=150^\circ$};
+
+    \node[rotate=2] at (3.5,-0.9)
+         {\textcyrillic{граница устойчивости инверторного режима}};
+  \end{scope}
+\end{tikzpicture}
+
+$$
+\beta_{min} = \gamma + \delta + \psi
+$$
+Если тока нет, то нет $\gamma$ и $\delta$, остается одна $\psi$.
+С ростом тока $I$ растет $\gamma$ и $\delta$.
+Максимальные пульсации $U$ при $\alpha=0$. На границе прерывистого режима
+среднее напряжение примерно равно пульсациям.
+${\displaystyle
+  \lambda = \frac{2\pi}{m}}$
+-- граничный режим. Справа справедливо уравнение (3)
+Кривые близки к прямой линии до прерывистого, граничного режима.
+Режим ``1-0'' ${\displaystyle 0<\lambda < \frac{2\pi}{m}}$ -- прерывистый режим,
+  проводит один вентиль ``1'', затем он выключается ``-0'' -- никто из
+  вентилей не проводит.
+
+$$
+  \begin{array}{ccl}
+    ``1-1'' & {\displaystyle \lambda = \frac{2\pi}{m}} &
+{\textcyrillic{-- граничный режим}} \\ 
+   ``1-2'' &{\displaystyle \frac{4\pi}{m}>\lambda>\frac{2\pi}{m}} &{\textcyrillic{-- двухвентильная коммутация}}
+  \end{array}
+$$
+
+Рассмотрим общий случай многофазного $m\ge 6$ преобразователя.
+Основной режим -- режим двухвентильной коммутации.
+  При больших токах и больших $L$
+
+  ``2-2'' -- ${\displaystyle \lambda = \frac{4\pi}{m}}$;
+
+ ``2-3'' -- ${\displaystyle \frac{4\pi}{m} <\lambda < \frac{6\pi}{m}}$;
+
+  Это были характеристики для нулевых схем. В мостовых схемах происходит
+  коммутация:  одна половина моста взаимодействует с другой половиной
+  моста.
+
+  Иногда режим ``2-2'' создают специально. Представим К.З.
+
+\begin{tikzpicture}
+  \begin{scope}[xscale=1,yscale=1.2]
+    \draw[thick,red] (0,2) -- (7,0.1);
+    \draw[thin, ->] (0, 0) -- (8,0) node[right] {$I$};
+    \draw[thin, ->] (0, -3) -- (8,-3) node[right] {$I$};
+    \draw[thin,<-] (7,-0.05) -- (6,-0.2) node[below]
+    {${\textcyrillic{это величина тока К.З.}}$};
+    \draw[thick,red] (0,-1) -- (5,-2);
+    \draw[thick,red] (5, -2) -- (5.5,-2.9);
+    \draw[thin,<-] (5.5,-3.05) -- (5.5,-3.2) node[below]
+    {${\textcyrillic{облегчённое выключение тока К.З.}}$};
+  \end{scope}
+\end{tikzpicture}
+
+\subsection{реверсивные преобразователи}
+Ток только справа, отрицательного тока быть не может.
+$$
+%\textcyrillic{отрицательная } \underbrace{U\cdot I}_
+\begin{array}{ccc}
+  & {U\cdot I} & \omega\cdot M\\
+  \textcyrillic{отрицательная} & \textcyrillic{электрическая} &
+  \textcyrillic{механическая } \\
+  & \textcyrillic{мощность} & \textcyrillic{мощность}
+\end{array}
+$$
+
+Двигатель постоянного тока:
+
+$$
+E_\phi = \omega C_\phi
+$$
+$$
+M_\textcyrillic{эм} = C_\phi I
+$$
+$$
+C_\phi = \frac{pN}{2\pi a}
+$$
+здесь $p$ -- количество полюсов, $N$ -- число активных...,
+$a$ -- число параллельных ветвей.
+
+Положительный ток, отрицательный момент.
+Не дай бог двигатель постоянного тока потеряет возбуждение
+$\Phi\downarrow$ $\omega\uparrow$
+Если $\Phi\downarrow$ 10-кратное форсирование в 10 раз дороже.
+Применялось при ртутных вентилях, с 20В падением в дуге, и охлаждением.
+С реверсом поля якоря тогда пытались <сделать> реверсивный поток.
+Лучше сделаем отрицательный ток.
+
+\subsection{классификация реверсивных тиристорных преобразователей}
+
+\begin{figure}[H]
+  \begin{tikzpicture}
+    \begin{scope}
+      \draw (0,0) -- (4,0) -- (4,2) -- (0,2) -- (0,0);
+      \node at (2,1) {$\begin{array}{c}
+          \textcyrillic{с одной}\\
+          \textcyrillic{группой вентилей}
+        \end{array}$};
+      \draw (6,0) -- (12,0) -- (12,2) -- (6,2) -- (6,0);
+      \node at (9,1) {$\begin{array}{c}
+          \textcyrillic{с двумя}\\
+          \textcyrillic{группами вентилей}
+        \end{array}$};
+      \draw[thin,->] (1,0) -- (0,-1);
+      \node at (0,-1.5) {$\begin{array}{c}
+        \textcyrillic{с контактным}\\
+        \textcyrillic{реверсором}
+        \end{array}$};
+       \draw[thin,->] (3,0) -- (3.2,-0.7);
+      \node at (3.2,-1.8) {$\begin{array}{c}
+          \textcyrillic{с помощью ключей}\\
+          \textcyrillic{с бесконтактным}\\
+          \textcyrillic{полупроводниковым}\\
+          \textcyrillic{реверсором}\\
+          \textcyrillic{переключает концы}
+        \end{array}$};
+      \node at (9,-0.4) {$\textcyrillic{\underline{по типу силовой схемы}}$};
+      \draw[thin,->] (8,-0.6) -- (7,-1);
+      \draw[thin,->] (9,-0.6) -- (9,-1.8);
+      \draw[thin,->] (10,-0.6) -- (11,-0.8);
+      \node at (7,-1.3) {$\textcyrillic{перекрёстная}$};
+      \node at (11,-1.3) {$\begin{array}{c}
+          \textcyrillic{встречно-}\\
+          \textcyrillic{паралельная}
+        \end{array}$};
+      \node at (9,-2) {$\textcyrillic{Н-схема}$};
+
+      \node at (9,-3.8){$\begin{array}{c}
+          \textcyrillic{\underline{по способу управления}}\\
+          \\
+          - \textcyrillic{c совместным управлением комплектами вентилей}\\
+          - \textcyrillic{с раздельнам управлением комплектами вентилей}
+      \end{array}$};
+      \end{scope}
+    \end{tikzpicture}
+\end{figure}    
+
+
+\subsection{Контактный реверсор}
+\begin{figure}[H]
+\begin{tikzpicture}
+  \begin{scope}\draw
+    (0,0) to[short] (1.5,0)
+    (2,0) circle (0.5cm)
+    node at(2,0) {M}
+    (2.5,0) to[short] (4,0)
+    to[short,-*] (4,1)
+    to[ospst,mirror,l_=$K_4$] (2,1)
+    to[cspst,-*,l=$K_3$] (0,1)
+    to[short] (0,0)
+    (4,1) to[short] (4,2)
+    to[cspst,l=$K_2$] (2,2)
+    to[ospst,mirror,l_=$K_1$] (0,2)
+    to[short,-*] (0,1)
+    (1,3) -- (3,3) -- (3,4) -- (1,4) -- (1,3)
+    (2.5,3.5) to[Ty] (1.5,3.5)
+    (1.5,3) to[short,-*] (1.5,2)
+    (2.5,3) to[short,-*] (2.5,1)
+    % сеть
+    (2,4) to[short,-*] (2,5)
+    (1.9,4.3) -- ++ (0.2,0.2)
+    (1.9,4.4) -- ++ (0.2,0.2)
+    (1.9,4.5) -- ++ (0.2,0.2)
+    (1,5) to (3,5)
+    (1.3,4.9) -- ++ (0.2,0.2)
+    (1.4,4.9) -- ++ (0.2,0.2)
+    (1.5,4.9)  -- ++ (0.2,0.2)
+  ;\end{scope}
+\end{tikzpicture}
+\end{figure}
+Если включены $K_2$ и $K_3$, ток течет через двигатель справа налево $\Longleftarrow$,
+Если включены $K_1$ и $K_4$, ток течет через двигатель слева направо $\Longrightarrow$.
+
+Как разорвать, возникает дуга. На переменном токе энергия $\uparrow\downarrow$. Дуга затухает, когда переменный ток перейдет через 0.
+
+Для преобразователя уменьшим средний ток до 0, и в этот момент перебросим контакты.
+
+Переключение инверторов
+\begin{figure}[H]
+  \begin{tikzpicture}
+    \draw[thin,->] (0,0) -- (7,0) node[right] {$\omega t$};
+    \draw[thin,->] (0,-1.8) -- (0,1.7) node[left] {$U,I$};
+    \draw[thick,blue] (0,1.5) -- (2,1.5) -- (2,-1.5) -- (4,-1.5) -- (4,1.5) -- (6,1.5);
+    \draw[thick,red] (0,1) -- (2,1) -- (3,0) -- (4,0) -- (5,-1) -- (6,-1);
+    \node[above] at (1.5, 1.5) {$U$};
+    \node[below] at (1,1) {$i_d$};
+    \node[below] at (0.5,0.1) {
+      $\begin{array}{c}
+        \textcyrillic{выпрямительный}\\
+        \textcyrillic{режим}
+      \end{array}$};
+    \node[right] at (4.5,1) {$\textcyrillic{переключение в инверторный режим}$};
+    \draw[thin,->] (4.4,0.9) -- (3.4,0);
+  \end{tikzpicture}
+\end{figure}  
+
+\subsection{бесконтактный ключ}
+\begin{figure}[H]
+  \begin{tikzpicture}
+    \begin{scope}\draw
+      (0,0) to[short] (1.5,0)
+      (2,0) circle (0.5cm)
+      node at(2,0) {M}
+      (2.5,0) to[short] (4,0)
+      to[short,-*] (4,1)
+      to[Do,l^=$VT_4$] (2,1)
+      to[Do,-*,l^=$VT_3$] (0,1)
+      to[short] (0,0)
+      (4,1) to[short] (4,2)
+      to[Do,l^=$VT_2$] (2,2)
+      to[Do,l^=$VT_1$] (0,2)
+      to[short,-*] (0,1)
+      (1,3) -- (3,3) -- (3,4) -- (1,4) -- (1,3)
+      (2.5,3.5) to[Ty] (1.5,3.5)
+      (1.5,3) to[short,-*] (1.5,2)
+      (2.5,3) to[short,-*] (2.5,1)
+      % сеть
+      (2,4) to[short,-*] (2,5)
+      (1.9,4.3) -- ++ (0.2,0.2)
+      (1.9,4.4) -- ++ (0.2,0.2)
+      (1.9,4.5) -- ++ (0.2,0.2)
+      (1,5) to (3,5)
+      (1.3,4.9) -- ++ (0.2,0.2)
+      (1.4,4.9) -- ++ (0.2,0.2)
+      (1.5,4.9)  -- ++ (0.2,0.2);
+      %
+      \draw[thin,<-,red] (0.5,0.5) -- (0,-0.5) node[below,red] {$\textcyrillic{К.З.}$};
+      \draw[loosely dashed,red] (0.9, 1.4) ellipse (0.6cm and 1.1cm)   
+      ;\end{scope}
+  \end{tikzpicture}
+\end{figure}
+Схема включения ключей аналогична контактному реверсору. $VT_1$--$VT_4$ и
+$VT_2$--$VT_3$.
+Необходимо сделать паузу чтобы не были включены одновременно $VT_1$ и $VT_3$
+иначе произойдет короткое замыкание.
+Недостатки -- сэкономил 1 тиристор, а купил 4. Схема применяется для малой мощности,
+для возбудителей, для гальваники. В гальванике технологически требуется сныть-нанести покрытие. Тренировка аккумуляторов.
+В линиях постоянного тока происходит реверс мощности а не реверс тока.

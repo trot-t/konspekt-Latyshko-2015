@@ -1,0 +1,560 @@
+\hspace{-3 cm}
+\begin{tikzpicture}
+  \begin{scope}[xscale=2,yscale=3]
+    \newcommand{\alphaa}{106.0 * pi / 180}
+    \newcommand{\gammaa}{21.0 * pi / 180}
+
+    \draw[thin, ->] (-0.2, 0) -- (5.8,0) node[right] {$\omega t$};
+    \draw[thin, ->] (0,0) -- (0,1.3) node[left] {$U$};
+    
+    \foreach \x/\xtext in {0, {pi/3}/{\frac{\pi}{m}},{pi}/\pi}
+    \draw (\x,0.1) -- (\x,-0.1) node [below] {$\xtext$};
+
+    % A,B,C
+    \draw[domain=-0.2:5.8, smooth, yellow]
+    plot (\x,{cos((\x) r)}); \node[above] at (0.2,1) {$e_k$};
+    \draw[domain=-0.2:5.8, help lines, smooth, green]
+    plot (\x,{cos((\x-2/3*pi) r)}); \node[above] at (2*pi/3+0.2,1) {$e_{k+1}$};
+    \draw[domain=-0.2:5.8, help lines, smooth]
+    plot (\x,{cos((\x-4/3*pi) r)}); \node[above] at (4*pi/3+0.2,1) {$e_{k-1}$};
+    % (A+B)/2 
+    \draw[domain={pi/3:pi/3+pi}, loosely dotted]
+    plot (\x,{cos(\x r)/2 + cos((\x - 2/3*pi) r)/2});
+
+
+    
+    \foreach \qq [evaluate=\qq as \qqshft using \qq*2*pi/3] in {0,...,1}
+     {
+      \begin{scope}[xshift=\qqshft cm,
+          every path/.style={color=red}]
+        
+        %Ed
+%        \draw[domain={-pi/3 + \alphaa + \gammaa}:{pi/3},ultra thick]
+%        plot (\x, {cos(\x r)});
+        \draw[domain={\alphaa+\gammaa}:{\alphaa + pi/3},ultra thick]
+        plot (\x,{cos(\x r)})
+        -| (\alphaa+pi/3, {cos((\alphaa + pi/3) r)/2 + cos((\alphaa-pi/3) r)/2})
+        [domain={\alphaa+pi/3}:{\alphaa+pi/3+\gammaa}]
+        plot (\x,{cos(\x r)/2 + cos((\x-2/3*pi) r)/2})
+        -| (\alphaa+pi/3+\gammaa, {cos((\alphaa +pi/3+ \gammaa-2*pi/3) r) })
+
+        [domain={\alphaa+\gammaa-pi+2*pi/3}:{\alphaa-pi/3+2*pi/3}]
+          plot(\x,  {cos((\x) r)})
+        ;        
+       \end{scope}
+     }
+
+     \node[below] at (pi+0.3, -0.6) {${\displaystyle \frac{e_k + e_{k+1}}{2}}$};
+     \draw[thin,->] (pi+0.2,-0.6) --
+     (pi+0.3,{cos((pi+0.3) r)/2 + cos((pi-2*pi/3+0.3) r)/2 -0.1});
+     % alpha
+     \draw[thin] (pi/3, 0.35) -- (pi/3,0.8);
+     \draw[thin] (pi/3+\alphaa,0.1) -- (pi/3+\alphaa, 0.8);
+     \draw[thin,->] (pi/3, 0.75) -- (pi/3+\alphaa,0.75);
+     \node[left] at (pi/3, 0.75) {$\alpha$};
+     % beta
+     \draw[thin] (4*pi/3,-0.4) -- (4*pi/3,0.8);
+     \draw[thin,<->] (pi/3+\alphaa, 0.6)--(4*pi/3, 0.6) node[right]
+           {$\beta=\pi-\alpha$};
+     % U_инвертора
+     \draw[thin,color=red] (pi/2,-0.36) -- (5*pi/6+pi,-0.36) node[right]
+     {$U_{\textcyrillic{инв}}$};
+
+  \end{scope}
+  \end{tikzpicture}    
+
+За счет чего течёт ток?
+\begin{figure}[H]
+\begin{circuitikz}\draw
+(0,4) to[L] (0,2)
+node[left] at (0,3.5) {-}
+node[left] at (0,2.5) {+}
+node[left] at (0,2) {${\textcyrillic{было}}$}
+node[right] at (0,3.5) {(+)}
+node[right] at (0,2.5) {(-)}
+node[right] at (0,2) {${\textcyrillic{стало}}$}
+to[Ty,mirror] (0,0)
+(2,4) to[L,*-] (2,2)
+to[Ty,mirror] (2,0)
+(4,4) to[L,*-] (4,2)
+to[Ty,mirror] (4,0)
+(0,4) to[short,-*] (2,4)
+to[short,-*] (4,4)
+to[short] (8,4)
+(0,0) to[short,-*] (2,0)
+to[short,-*] (4,0)
+to[short] (8,0)
+to (8,1)
+to[american voltage source] (8,3)
+to[short] (8,4)
+node[right] at (8,2.5) {(+)}
+node[right] at (8,1.5) {(-)}
+node[right] at (8.2,2) {$E_{\textcyrillic{н}}{\textcyrillic{ЭДС нагрузки}}$}
+node[right] at (8,0.5) {$
+\begin{array}{c}
+{\textcyrillic{все напряжения}}\\
+{\textcyrillic{отсчитываем}}\\
+{\textcyrillic{относительно}}\\
+{\textcyrillic{нулевого провода}}
+\end{array}
+$}
+;\end{circuitikz}
+\end{figure}
+Все напряжения отсчитываются относительно нулевого провода и поэтому
+ ток течёт за счёт ЭДС нагрузки!
+
+$\alpha$ двигаем дальше, от этого положительная часть уменьшается,
+а отрицательная увеличивается. Если энергия течёт в сеть, значит
+\begin{circuitikz}\draw
+node[right] at (0,0) {$e_{\textcyrillic{н}}$}
+node[left] at (0,0.2) {+}
+node[left] at (0,-0.2) {-}
+;\end{circuitikz}.
+
+Теперь рисуем картинку при $\alpha>90^\circ$ Введем угол $\beta$:
+$$
+\beta = \pi - \alpha
+$$
+
+$\alpha$ -- угол запаздывания, $\beta$ -- угол опережения.
+Рисуем ток.
+\begin{figure}[H]
+\begin{tikzpicture}
+  \begin{scope}[xscale=2,yscale=3]
+      \newcommand{\alphaa}{106.0 * pi / 180}
+          \newcommand{\gammaa}{21.0 * pi / 180}
+
+    \draw[thin, ->] (-0.2, 0) -- (5.8,0) node[right] {$\omega t$};
+
+    \draw[domain=-0.2:1.8, smooth, yellow]
+        plot (\x,0)
+    [domain=1.8:2.2, smooth, yellow]
+         plot (\x, {1/0.4*(\x-1.8)})
+    [domain=2.2:3.8, smooth, yellow]
+         plot (\x,1)
+    [domain=3.8:4.2, smooth, yellow]
+         plot (\x, {-1/0.4*(\x-4.2)})
+    [domain=4.2:5.8, smooth, yellow]
+         plot (\x,0);
+    \draw[domain=-0.2:1.8, help lines, smooth, green]
+         plot (\x,1)
+    [domain=1.8:2.2, help lines, smooth, green]
+        plot (\x,{-1/0.4*(\x-2.2)})
+    [domain=2.2:3.8, help lines, smooth, green]
+         plot (\x,0)
+    [domain=3.8:4.2, help lines, smooth, green]
+        plot (\x, {1/0.4*(\x-3.8)})
+    [domain=4.2:5.8, help lines, smooth, green]
+         plot (\x,1);
+    %
+    \draw[domain=1.8:3.6, smooth, dashed, yellow]
+    plot (\x, {cos(1.4*(\x - 2.7) r) - cos(1.4*(1.8 - 2.7) r)});
+    \draw[domain=1.8:3.6, help lines, smooth, loosely dashed,green]
+    plot (\x, {-cos(1.4*(\x - 2.7) r) + cos(1.4*(1.8 - 2.7) r)+1});
+    %
+    \draw (2.7,0.1) -- (2.7,-0.1) node[below] {$\pi$};
+\end{scope}
+\end{tikzpicture}        
+\end{figure}
+
+$\beta>0$ Если не выключить $k$-й вентиль до точки пересечения, то он уже
+никогда не выиключится.
+Если $L$ большая, коммутация не кончится. Темп изменения тока пропорционален
+ЭДС. Но ЭДС, а значит и скорость нарастания тока уменьшаются, а дальше
+скорость станет отрицательной, а значит, коммутация не будет продолжаться.
+
+Коммутация вентилей должна закончиться до момента отсчета угла $\beta$.
+В противном случае переключения фаз не произойдёт. $\beta$ не просто
+больше 0, а $\beta>\gamma$. Предположим, что разность $\beta-\gamma$ мала.
+Сравним её со временем выключения вентиля. Вентиль может самопроизвольно
+включиться $I\approx n$ носителей. $I$ убывает, но рекомбинации носителей
+не произошло(вентиль не восстановился).
+$\beta-\gamma>{\textcyrillic{времени запирания тиристора}}$.
+$\omega t_{\textcyrillic{выкл}}= \sigma$ -- угол запирания или выключения вентиля.
+
+$\beta>\gamma+\sigma$ -- каждый раз условие увеличивается.
+
+Практически, учитывается наличие несимметрии напряжения сети, несимметрии
+углов регулирования $\alpha$ (несимметрия СИФУ), с учётом несинусоидальности
+и разброса параметров тиристора необходим запас по углу для устойчивой
+работы инвертора ($\psi$ -- угол запаса)
+
+\begin{equation}
+\beta \ge (\gamma+\beta+\psi) = \beta_{min}
+\label{steady_invertor}
+\end{equation} -- условие устойчивой работы инвертора.
+отсюда, $\alpha_{max} = \pi - \beta_{min}$
+
+
+\begin{tikzpicture}
+  \begin{scope}[xscale=1.5,yscale=1.5]
+      \newcommand{\alphaa}{106.0 * pi / 180}
+      \newcommand{\gammaa}{21.0 * pi / 180}
+    % A,B,C
+        \draw[domain=0.1:1.4, help lines, smooth, black]
+            plot (\x,{cos((\x) r)});
+        \draw[domain=0.1:1.4, help lines, smooth, green]
+            plot (\x,{cos((\x-2/3*pi) r)});
+        \draw[ultra thick] (1.6,0.6) -- (2,0.6);
+        \draw[ultra thick] (1.6,0.4) -- (2,0.4);
+        \draw[ultra thick] (1.9,0.7) -- (2.1,0.5);
+        \draw[ultra thick](1.9,0.3) -- (2.1,0.5);
+        \draw[domain=0.1:1.4, help lines, smooth, dashed, black]
+                    plot ({2+\x},{cos((\x) r)});
+       \draw[domain=0.1:1.4, help lines, smooth, black]
+                           plot ({1.8+\x},{cos((\x) r)});                           
+        \draw[domain=0.1:1.4, help lines, smooth, green]
+                    plot ({2+\x},{cos((\x-2/3*pi) r)});
+                                        
+\end{scope}
+\end{tikzpicture}
+Если сместилась фаза, $\beta$ тоже сместилась. Несимметрия СИФУ - средний угол
+18,22. Там где не хватит $\beta$.
+Несинусоидальность фазы - опять приводит к необходимости увеличить $\beta$.
+От температуры, тока, который был, напряжение приложенное.
+${\displaystyle \Delta}_\alpha + {\displaystyle \Delta}\phi$ -- несимметрия
+сети + $ {\displaystyle \Delta}\phi$ --несинусоидальность +
+ ${\displaystyle \Delta}$ (разброс на углы включения).
+ Эмпирически $\beta_{min} = 15...30^\circ$, $\alpha_{max}=150,165^\circ$
+К чему приведет невыполнение (\ref{steady_invertor})? Невыполнение (\ref{steady_invertor}) может привести к ``опрокидыванию'' инвертора: вместо инвертора получим
+выпрямительный режим -- аварийный режим, связанный с переходом преобразователя
+в выпрямительный режим с резким возрастанием выпрямленного тока. Выпрямленный ток
+может возрастать до значений, близких к току К.З, Иногда называют током
+``двойного'' К.З., т.е. к К.З. одновременно и преобразователя и источника.
+
+
+\begin{figure}[H]
+\begin{circuitikz}\draw
+(0,4) to[L] (0,2)
+node[left] at (0,3.5) {-}
+node[left] at (0,3) {$U_d$}
+node[left] at (0,2.5) {+}
+node[left] at (0,2) {${\textcyrillic{выпрямленное}}$}
+%node[right] at (0,3.5) {(+)}
+%node[right] at (0,2.5) {(-)}
+%node[right] at (0,2) {${\textcyrillic{стало}}$}
+to[Ty,mirror] (0,0)
+(1,4) to[L,*-] (1,2)
+to[Ty,mirror] (1,0)
+(2,4) to[L,*-] (2,2)
+to[Ty,mirror] (2,0)
+(0,4) to[short,-*] (1,4)
+to[short,-*] (2,4)
+to[short] (8,4)
+(0,0) to[short,-*] (1,0)
+to[short,-*] (2,0)
+to[short] (8,0)
+to (8,1)
+to[american voltage source] (8,3)
+to[short] (8,4)
+%
+(3,3.9) to[short,v^=$U_{\textcyrillic{инв}}$] (3,0.1)
+(2.9,0.2) -- ++ (0.1,-0.1)
+-- ++ (0.1,0.1)
+(2.9,3.8) -- ++ (0.1,0.1)
+-- ++ (0.1,-0.1)
+%
+node[right] at (8,2.5) {+}
+node[right] at (8,1.5) {-}
+node[right] at (8.2,2) {$E_{\textcyrillic{н}}$} 
+node[right] at (8,0.5) {}
+% I
+(6,3.8) to[short,i^>={$I_d$}] (5,3.8)
+;\end{circuitikz}
+\end{figure}
+
+$$
+I_d = \frac{\overbrace{E_{\textcyrillic{н}}}^{\textcyrillic{согласно с током}} -
+\overbrace{\mid E_d\mid}^{\textcyrillic{само отрицательно}}
+}{R_{\textcyrillic{н}} +R_{\textcyrillic{эквив}}}
+$$
+Была разность ЭДС, а станет сумма. $U_{\textcyrillic{инв}}$ -- аккумулятор,
+выпрямитель, солнечная батарея. $R$ -- маленькая, $R_{\textcyrillic{н}} - 5\%$
+и если напряжение не в плюсе а в минусе, то в 19 раз вырастет ток. Получаем
+КЗ и для инвертора и для нагруки. Не двойной ток, а ``удвоение'' явления.
+А ток $I \approx I_{\textcyrillic{К.З.}}/2$.
+
+Опрокидывание инвертора приводит к аварийному отключению преобразователя. А есть и электронные средства.
+
+Инверторный режим принципиально менее надежен чем выпрямительный режим.
+
+Опрокидывание инвертора может происходить в случае
+\begin{itemize}
+\item кратковременного исчезновения или резкого уменьшения напряжения питающей сети;
+\item в случае пропуска (даже одиночного) управляющего импульса.
+\item в случае ложного несвоевременного срабатывания (даже одиночного) какого-либо
+вентиля.
+\end{itemize}
+
+4 причины: 1) -- невыполнение условий.
+пропустили импульс -- пропал контакт.
+Ложное отпирание может произойти вследствие сбоя СИФУ -- ток растет лавиной.
+
+Где используется инверторный режим.
+
+Солнечные батареи $-\;\leftarrow;=$. Где инверторы крайне необходимы.
+Гидрогенераторы мощностью 100МВт возбуждаются с помощью 10МВт.
+Для управления генераторами а обмотке возбуждения гигантская магнитная энергия,
+её и нужно передать в сеть. Для включения-выключения генератора требуется форсировка в 5-8-14 раз. На синхронных компенсаторах
+в 10-13 раз, 1300В вместо 100в. И такая же скорость снижения должна быть.
+
+Отключение линий.
+Разгон -- выпрямительный режим, Самое экономное торможение -- рекуперация,инверторный режим.
+
+\subsection{Прерывистый режим работы преобразователя}
+Режим прерывистого выпрямленного тока. Ток нагрузки, правильный ток $I_d$. А если
+он(ток) $I_d$ начинает прерываться -- это прерывистый режим.
+Пульсация большая. 1й случай -- это нонсенс. А вторая ситуация, когда ток маленький
+и ток сравним с пульсацией.
+
+$$
+\frac{E_d - E_{\textcyrillic{н}}}{R_\Sigma} = I_d 
+$$
+В этой формуле $I_d$ -- постоянный, варьируется за счет $E_d - E_{\textcyrillic{н}}$.
+
+$$
+e_d = E_d + \left(e_d\right) =const
+$$
+$\alpha$ не меняется.
+$$
+\frac{\left(e_d\right)}{{\textcyrillic{переменная}} ``Z''} = const
+$$
+а ток разложить в ряд Фурье.
+
+Двигатель в холостом режиме $E_{\textcyrillic{двиг}} \approx
+E_{\textcyrillic{источника}}$
+
+\begin{tikzpicture}
+  \begin{scope}[xscale=1,yscale=1]
+  \newcommand{\alphaa}{106.0 * pi / 180}
+  \newcommand{\gammaa}{21.0 * pi / 180}
+  \draw[thin, ->] (-0.2, 0) -- (9,0) node[right] {$\omega t$};
+  \draw[thin,dashed] (-0.2, 2) -- (3.5,2);
+  \draw[thin] (0,2) -- (0.5,2.5) -- (1.5,1.5) -- (2.5,2.5) -- (3.5,1.5);
+% A,B,C
+  % =>
+  \draw[ultra thick] (3.8,1.1) -- (4.5,1.1);
+  \draw[ultra thick] (3.8,0.9) -- (4.5,0.9);
+  \draw[ultra thick] (4.4,1.2) -- (4.6,1.0);
+  \draw[ultra thick](4.4,0.8) -- (4.6,1.0);
+
+ \draw[thin,dashed] (5, 0.2) -- (8.5,0.2);
+ \draw[thin,red] (5,0.2) -- (5.5,0.7) -- (6.2,0) -- %(6.5,-0.3) -- (7.5,0.7)
+ (6.8,0) -- (7.5,0.7)-- (8.2,0) -- (8.5,0);
+
+
+\end{scope}
+\end{tikzpicture}
+
+Пересечь ``нуль'' не может, потому что тиристоры не проводят ток в обратном направлении. Такая
+ситуация бывает в при работе двигателя режиме Х.Х. Ток плохой(маленький), но управлять двигателем
+нужно и в этом режиме. Для установок,например, для того чтобы вывести двигатель в нужную точку
+(позиционирование х,у), это может иметь важное значение.
+
+\hspace{-3 cm}
+\begin{tikzpicture}
+  \begin{scope}[xscale=2,yscale=3]
+    \newcommand{\alphaa}{106.0 * pi / 180}
+    \newcommand{\gammaa}{21.0 * pi / 180}
+    \newcommand{\En}{0.37}
+
+    \draw[thin, ->] (-0.2, 0) -- (5.8,0) node[right] {$\omega t$};
+    \draw[thin, ->] (0,0) -- (0,1.3) node[left] {$U$};
+
+    \draw[thin, ->] (-0.2, -2) -- (5.8,-2) node[right] {$\omega t$};
+    \draw[thin, ->] (0,-2) -- (0,-1) node[left] {$I$};
+
+
+    \foreach \x/\xtext in {0, {pi/3}/{\frac{\pi}{m}},{pi}/\pi}
+    \draw (\x,0.1) -- (\x,-0.1) node [below] {$\xtext$};
+
+    % A,B,C
+    \draw[domain=-0.2:5.8, smooth, yellow]
+    plot (\x,{cos((\x) r)}); \node[above] at (0.2,1) {$e_k$};
+    \draw[domain=-0.2:5.8, help lines, smooth, green]
+    plot (\x,{cos((\x-2/3*pi) r)}); \node[above] at (2*pi/3+0.2,1) {$e_{k+1}$};
+    \draw[domain=-0.2:5.8, help lines, smooth]
+    plot (\x,{cos((\x-4/3*pi) r)}); \node[above] at (4*pi/3+0.2,1) {$e_{k-1}$};
+
+    % E_н
+    \draw[thin] (-0.2,\En) -- (5.8,\En);
+    \draw[thin,<->] (5.6,\En)--(5.6,0)node[midway,right]
+    {$E_\textcyrillic{н}$};     
+
+    \foreach \qq [evaluate=\qq as \qqshft using \qq*2*pi/3] in {0,...,1}
+     {
+      \begin{scope}[xshift=\qqshft cm,
+          every path/.style={color=red}]
+        
+        %Ed
+        \draw[domain={pi/3-0.2}:{pi/3 + 0.4},ultra thick]
+        plot (\x, {cos(\x r)})
+        -| ({pi/3+0.4}, \En);
+        \draw[domain={pi/3 + 0.4}:{pi-0.2},ultra thick]
+        plot (\x, \En)
+        -| ({pi-0.2},{cos((pi-0.2-2/3*pi) r)});
+
+        %Id
+        \draw[domain={pi/3-0.2}:{pi/3 + 0.4},ultra thick]
+plot(\x, {-2 + (pi/0.6*cos((\x-pi/3-0.1) r) - pi/0.6*cos((0.3) r) });
+%plot(\x, {-3*(\x-pi/3+0.7)*(\x-pi/3+0.2)*(\x-pi/3-0.4)-2});
+        \draw[domain={pi/3 + 0.4}:{pi-0.2},ultra thick]
+        plot (\x, -2);
+     \end{scope}
+
+      % подписи под Id
+      \draw[thin] (pi/3-0.2,-2)-- (pi/3-0.2,-2-0.12);
+       \draw[thin] (pi-0.2,-2)-- (pi-0.2,-2-0.12);
+        \draw[thin,<->] (pi/3-0.2,-2.1)--(pi-0.2,-2.1)
+        node[midway,below] {$2\pi/m$};
+        %alpha
+        \draw[thin] (pi/3, 0.6) -- (pi/3, 1);
+        \draw[thin] (pi/3-0.1, 0.7) -- (pi/3+0.1, 0.9)
+          node[above right] {$\alpha$};
+        \draw[thin] (pi-0.2, 0.7) -- (pi-0.2, 1);
+%        \draw[thin,<-] (pi-0.2, 0.9) -- (pi+0.1, 0.9) node[right] {$\alpha$};
+        \draw[thin,-latex] (pi/3,0.8) -- (pi-0.2, 0.8);
+        % \lamdba - угол проводимости
+        \draw[thin] (pi-0.2, \En-0.1) -- (pi-0.2, -0.5);
+        \draw[thin] (pi+0.4, 0.1) -- (pi+0.4, -0.5);
+         \draw[thin,<->] (pi-0.2, -0.4) -- (pi+0.4, -0.4) node[right]
+         {$\lambda{\textcyrillic{ -- угол проводимости}}$};
+         \node[right] at (pi/3,-1.1) {$
+         \begin{array}{c}         
+         {\textcyrillic{производная}} \\
+         {\textcyrillic{пропорциональна}} \\
+         {\textcyrillic{разности напряжений}}
+         \end{array}$};
+         \draw[thin,->] (pi-0.3,-1.3) -- (pi-0.1,-1.8);
+          \draw[thin,->] (2*pi/3,-0.9) -- (pi-0.25, 0.5);
+          %
+          \draw[thin,dashed] (pi+0.14,-1.75)--(pi+0.14,0.38);
+          \draw[thin,<-] (pi+0.1,-2.05) -- (pi+0.1,-2.2) node[right]
+          {$\textcyrillic{максимум немного левее из-за } i\cdot r_\phi$};
+
+          %заштрихованная площадка
+          \draw[thin,domain={pi-0.2}:{pi + 0.14},pattern=north west lines,
+          pattern color=blue]
+          (pi-0.2,\En)--
+          plot (\x,{cos((\x-2/3*pi) r)});
+          \draw[thin,blue] (pi,\En +0.2) --(pi+0.5,\En +1.2)
+          node[above] {
+$\begin{array}{c}
+\textcyrillic{заштрихованная площадка }\sim
+          \textcyrillic{ току}\\
+          e_\phi -E\textcyrillic{н} -\xcancel{i\cdot r_\pi = L
+          \frac{\partial i}{\partial t}}
+          \end{array}$};
+          
+   }
+\end{scope}
+\end{tikzpicture}
+Если бы не было $i\cdot r_\phi$, то максимум тока был бы где
+$U=E_\textcyrillic{н}$ (производная в точке максимума равна 0).
+
+Угол проводимости $\lambda$ -- угол, в течении которого ток больше 0.
+
+Никакого угла коммутации не будет. Ток проводит -- пауза -- проводит
+следующий вентиль.
+
+Постоянная ЭДС нагрузки
+$$
+\underbrace{E_d + (e_d)}_{\textcyrillic{выпрямленное}} -
+E_{\textcyrillic{н}} = \underbrace{
+L \frac{\partial i_d}{\partial t} +R_\Sigma i_d}_
+{\textcyrillic{и нагрузка и преобразователь}}
+$$
+$U_0$ включили в $E_{\textcyrillic{н}}$. Разность
+$E_d + (e_d) -E_{\textcyrillic{н}}$ больше 0, чтобы протекал ток.
+
+
+
+\begin{figure}[H]
+\begin{circuitikz}\draw
+(0,4) to[L] (0,2)
+to[Ty,mirror] (0,0)
+(1,4) to[L,*-] (1,2)
+to[Ty,mirror] (1,0)
+(0,4) to[short,-*] (1,4)
+to[short] (4,4)
+(0,0) to[short,-*] (1,0)
+to[short] (4,0)
+to[american voltage source] (4,1.5)
+to[L] (4,2.75)
+to[R] (4,4)
+%
+node[right] at (4.2,1.3) {-}
+node[right] at (4.2,0.2) {+}
+node[right] at (4.2,0.75) {$E_{\textcyrillic{н}}
+{\textcyrillic{ положительное}}$}
+;\end{circuitikz}
+\end{figure}
+В паузе будет ЭДС нагрузки, все вентили выключены.
+
+$$
+U_d = \frac{1}{2\pi/m}\left[
+\int\limits_{-\frac{\pi}{m} + \alpha}^{-\frac{\pi}{m} + \alpha + \lambda}
+\sqrt{2}E_{2\phi}cos(\omega t) d\omega t +
+E_{\textcyrillic{н}} \left(\frac{2\pi}{m} - \lambda \right)
+\right] =
+$$
+
+${\displaystyle \lambda < \frac{2\pi}{m}}$ -- означает, что ток прерывистый.
+
+${\displaystyle \lambda > \frac{2\pi}{m} => \lambda = \frac{2\pi}{m} + \gamma}$
+-- режим непрерывного тока.
+
+при ${\displaystyle \lambda = \frac{2\pi}{m}}$ -- граница, должны сливаться оба режима, сливаются на отрезке длиной $\gamma=0$.
+
+$$
+= \frac{m}{2\pi} \sqrt{2} E_{2\phi}\left[ sin\left(-\frac{\pi}{m} +
+\alpha + \lambda\right) - sin\left(-\frac{\pi}{m} +\alpha\right)
+\right]
++ E_{\textcyrillic{н}} \left( 1 - \frac{\lambda m}{2\pi} \right) =
+$$
+
+$$
+\frac{m}{2\pi} \sqrt{2} E_{2\phi} sin \frac{\lambda}{2}
+cos\left( \alpha - \frac{\pi}{m} +\frac{\lambda}{2} \right)
++ E_{\textcyrillic{н}} \left( 1 - \frac{\lambda m}{2\pi}\right) =
+$$
+
+$$
+U_d = E_{d0} \frac{sin\frac{\lambda}{2}}{sin\frac{\pi}{m}}
+cos\left(\alpha-\frac{\pi}{m} + \frac{\lambda}{2}\right) +
+E_{\textcyrillic{н}} \left( 1 - \frac{\lambda m}{2\pi} \right)
+$$
+
+${\displaystyle \lambda = \frac{2\pi}{m}}$ -- граничный режим $\frac{\pi}{m}?$
+
+Частный случай режима работы управляемого преобразователя
+на чисто активную нагрузку.
+$$
+= \int\limits_{-\frac{\pi}{2} + \alpha}^{\frac{\pi}{2}}
+$$
+
+а если $\alpha=0$ -- тогда не будет прерывистого режима. Прерывистый режим
+будет в случае когда $\alpha>0$
+
+$$
+\underbrace{\frac{\pi}{m} + \alpha}_{\begin{array}{c}
+{\textcyrillic{момент включения}}\\
+{\textcyrillic{следующей фазы}}
+\end{array}} > \frac{\pi}{2}
+$$
+Должно выполнятся неравенство, иначе нет прерывистого режима.
+
+\begin{equation}
+\frac{m}{2\pi}\sqrt{2}E_{2\phi}\left[1 - sin\left(\alpha-\frac{\pi}{m}\right)
+\right] =
+E_{d0} \frac{1 - sin\left(\alpha-\frac{\pi}{m}\right)}{2sin\frac{\pi}{m}}
+\end{equation}
+
+$$
+\alpha>\frac{\pi}{2} -\frac{\pi}{m}
+$$
+\begin{equation}
+\frac{\pi}{2} -\frac{\pi}{m} < \alpha < \frac{\pi}{2} +\frac{\pi}{m}
+\label{7a}
+\end{equation}
+для разных m разные неравенства (\ref{7a})

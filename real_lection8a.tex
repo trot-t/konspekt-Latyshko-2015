@@ -1,0 +1,422 @@
+Мы рассматривали энергетические характеристики тиристорных преобразователей, зависимых
+от сети. Рассматривали КПД.
+
+Напомню коэффициэнт мощности, который определялся как
+$$
+\lambda = \frac{P}{S}
+$$
+при допущении: Напряжение <на первичной стороне> синусоидальное.
+
+$U = U_{(1)}$ -- напряжение равно напряжению первой гармоники.
+
+Если сеть трехфазная, то 
+$S = 3U_\phi I$. Формула написана для фазного напряжения, если рассматривать линейное, то
+добавим $\sqrt{3}$. $I$ синусоидальным считать нельзя.
+
+$$
+I = \sqrt{\sum\limits_{k=0}^\infty I_k^2}
+$$
+
+$$
+k = \frac{f_{\textcyrillic{гармоники}}}{f_{\textcyrillic{сети}}} = m,m \pm 1
+$$
+
+грубо ${\displaystyle \frac{I_{(k)}}{I_{(1)}}} \simeq \frac{1}{k}$ -- так можно считать для
+малых $k$.
+
+при $m=6$ $k=5,7,11,13,17,19$ `Это соотношение выполняется для первых $m$. Выполняется
+тем более точно, чем меньше угол коммутации $\gamma=0$, А угол $\alpha=0$. Эти условия
+выполняются в том случае если ток мал и индуктивность мала, или и то и другое.
+
+Если подставить значение $S$  и $P$.
+
+Активная мощность передается током и напряжением одинаковых частот.
+
+$P = U\cdot I_{(1)}Cos\phi_{\cancel{(1)} \textcyrillic{ -- но могу и не писать}}$
+
+Напряжение и токи разных частот не передают ни активной ни реактивной мощности.
+Активную и реактивную мощность передают $U$ и $I$ одинаковых частот.
+
+Это допущение. На самом деле сеть не бесконечной мощности, ток будет падать на сопротивлениях
+и напряжение тоже будет иметь гармоники, но по допущению гармоник напряжения нет.
+
+$$
+Q =U\cdot I_{(1)}\; Sin\:\phi = 3U_\phi I_{(1)}Sin\phi
+$$
+
+$$
+\lambda = U\cdot I{(1)}\; Cos\phi = \frac{ 3U_\phi I_{(1)}Cos\phi}{3U_\phi I}=
+\frac{ I_{(1)}}{\sqrt{\sum\limits_{k=1}^\infty I_k^2}}Cos\phi = \nu\cdot Cos\phi
+$$
+
+\begin{equation}
+  \lambda = \nu\cdot Cos\phi
+  \end{equation}
+
+Что такое $\nu$? Это коэффициэнт несинусоидальностиЮ лучше назвать коэффициэнт искажения тока.
+$\nu < 1$, А насколько.
+
+Пренебрегая углом коммутации
+$$
+\nu \cong \frac{3}{\pi} = 0.955
+$$
+
+С ростом гармоник амплитуда $I_{(k)}$ падает. Первые гармоники вносят наибольший вклад в
+$I =\sqrt{\sum I^2_{{k}}}$.
+
+Продолжим равенство
+$$
+=  \frac{I_{1}}{\sqrt{I_{(k)}^2 + \sum\limits_{k>1} I^2}} = \frac{I_{(1)}}
+{\sqrt{I_1^2+I_\nu^2}}
+$$
+Все $I$ в формуле -- действующие значение, и $\nu= \sum\limits_{k>1} I^2$
+
+Коэффициэнт $\lambda$ равен $cos\phi$ только в случае если есть только первая гармоника,
+а если нет, то
+напомним
+$$
+cos \phi = \frac{cos\alpha + cos(\alpha+\gamma)}{2} 
+$$
+
+Если $\gamma$ мало, то $cos\phi = cos\alpha$. Часто используют приближение
+$cos\phi = cos(\phi + \frac{\gamma}{2})$. Если знаете $\alpha$ и $\gamma$, то зачем
+пользоваться приближенным, если есть точное.
+
+Если $cos\phi$ мал, то это плохо, потому что $Q \sim sin\phi$. Так что надо повышать,
+говорят что до 0.95.
+
+Если я возьму катушку, это плохо, но важна еще мощность, сила тока. Если $cos\phi=0.1$ это
+не плохо, если полная мощность 10ватт.
+
+У трансформаторов на холостом ходу очень низкий $cos\phi$, но при холостом ходе
+течёт малы ток.
+
+Когда говорят о коэффициэнте мощности тиристорного преобразователя, то ...
+
+$$
+P = 3U_\phi I_{(1)} cos\phi_{(1)} \simeq U_d I_d
+$$
+
+$$
+Q=3U_\phi I_{(1)} sin\phi_{(1)} \simeq \sqrt{1-\left(
+\frac{P}{E_dI_d}
+  \right)^2} 
+$$
+Почему так. Вернулись к $S$ полной мощности.
+
+$$
+S = 3U_\phi \sqrt{I_{(1)}^2 + I_{(\nu)}^2} =
+\sqrt{\left(3U_\phi I_{(1)}\right)^2 + \left(3U_\phi I_\nu\right)^2} =
+  \sqrt{S_{(1)}^2+S_\nu^2}
+$$
+
+  $S_{(1)}$ -- так обозначили по аналогии с током. $S_{(\nu)}$ -- полная мощность остальных
+  гармоник, мощность искажения по аналогии с током искажения.
+
+  Для первой гармоники справедливо
+
+  $$
+  S_{(1)} =\sqrt{P^2+Q^2}
+  $$
+  \begin{equation}
+    S=\sqrt{P^2+Q^2+S_\nu^2}
+  \end{equation}
+
+$$  
+  S_{(1)} = 3U_\phi I_{(1)} \simeq const
+  $$
+
+  Рассматриваем, как меняется $S$, меняя $\alpha$ при $I_d=const$
+
+  \begin{tikzpicture}
+    \draw[->,thin] (-0.2,0)--(2*pi+0.4,0);
+    \draw[domain=-0.2:2*pi+0.2,help lines,smooth]
+    plot (\x, {sin(\x r)});
+    \draw[domain=-0.2:pi/6+0.1,help lines,smooth]
+     plot (\x, {sin((\x+2*pi/3) r)});
+   %
+     \draw[domain=pi/3:pi/3+0.04]
+     plot(\x, {10*(\x-pi/3)});
+     \draw[domain=5*pi/6-0.3:5*pi/6-0.26]
+     plot(\x, {-10*(\x-5*pi/6+0.26)});
+     \draw[domain=pi/3+0.04:5*pi/6-0.3]
+     plot(\x, 0.41);
+     %
+     \draw[thin] (pi/3,-0.05)--(pi/3,-0.55) (5*pi/6-0.26,-0.05)--(5*pi/6-0.26,-0.55);
+     \draw[thin,<->] (pi/3,-0.5)--(5*pi/6-0.3,-0.5) node[midway,below]{$\lambda$};
+     \draw[thin,<-]  (pi/3-0.05,0.15) -- (pi/6,-1)
+     node[below] {$\textcyrillic{наклон--из-за влияния }\gamma$};
+
+\draw[thin,<-] (5*pi/6-0.2,0.41)--(pi+0.2,0.41) node[right]{ток $I_d$ имеет постоянную амплитуду};
+   \draw[thin] (pi/6,0.6) -- (pi/6,1.3) (pi/3+0.04,0.6)--(pi/3+0.04,1.3);
+   \draw[thin,->] (pi/6,1.2)--(pi/3+0.04,1.2) node[midway,above] {$\alpha$};
+    \draw[thin] (pi/6-0.08,1.2-0.08) -- (pi/6+0.08,1.2+0.08)
+;\end{tikzpicture}
+
+Ток $I_d$ имеет постоянную амплитуду, $\lambda$ примерно одной ширины.
+Влияние $\gamma$ мало. Значит действующее значение не меняется.
+
+При постоянстве выпрямленного тока $I_d$ и изменении угла $\alpha$ величина
+1-й гармоники сетевого тока сохраняется практически неизменной с точностью
+до долей процента!
+
+\begin{tikzpicture}
+\draw[thin,->](-5.2,0)--(7,0) node[below]
+{$\displaystyle \frac{U_d}{E_{d0}} = \frac{P}{E_{d0}I_d} =\overline{p}$};
+\draw[thin,->] (0,-0.5)--(0,6) node[left]
+{$\displaystyle \overline{q}=\frac{Q}{E_{d0}I_d}$}
+node[right] {   $\overline{q}$ -- с чертой относительная величина}
+;
+\draw[domain=-5:5,samples=400]
+plot(\x, {sqrt(25-\x*\x)});
+\draw[dashed,thin](1.5,0)--(1.5,{sqrt(25-1.5*1.5)})--(0,{sqrt(25-1.5*1.5)});
+\draw[thin,->] (0,0)--(1.5,{sqrt(25-1.5*1.5)}) node[midway]
+{$\overline{s_1}_{\textcyrillic{относит.}}$};
+\draw (1.5,0) node[above right]{$p_\textcyrillic{отн.}$}
+(0, {sqrt(25-1.5*1.5)}) node[below left]{$q_\textcyrillic{отн.}$}
+(-5,0)node[below]{-1} (5,0) node[below] {1};
+%\begin{axis}[stack plots=y,area style,smooth,enlarge x limits=false]
+%\addplot coordinates{(0,1.2) (1,1) (2,2) (3,2)}\closedcycle;
+%\addplot coordinates{(0,1) (1,1.5) (2,0) (3,0)}\closedcycle;
+%\addplot coordinates{(0,1) (1,1) (2,2) (3,2)}\closedcycle;\end{axis}
+\draw [thick,pattern=north east lines, pattern color=red]
+(4.5,0)--(5,0)arc(0:25:5)--(4.5,0);
+\draw[thin,dashed] (4.5,1.5)--(4.5,5) node[midway]{$I_d=const$};
+\draw[thin,dashed] (-1,-1)--(4.5,4.5) node[right] {$cos\:\phi$};
+%\draw[decoration={text along path,text={$cos\:\phi$},
+%text align={center}},decorate] (-1,-1)--(4.5,4.5);
+%\draw[thin,dashed] (-1,-1)--(4.5,4.5) node[at end]{$cos\:\phi$};
+
+\draw[thin] (4.7,1)--(5.5,1.3) node[right]
+{\begin{tabular}{c}
+коммутационное\\
+падение
+\end{tabular}
+};
+\draw[thin,<-] (4.45,-0.05) -- (2.8,-2.2) node[below]
+{$U_{d\textcyrillic{относит.}max}$};
+\draw[thin,<-] (-4.45,-0.05) -- (-3.2,-2.2) node[below]
+{\begin{tabular}{c}$U_{d\textcyrillic{относит.}min}$\\дальше идет\\
+опрокидывание инвертора\end{tabular}};
+\draw[thin,<-] (2.5,-0.2) -- (2,-0.8) node[below]{выпрямитель};
+\draw[thin,<-] (-2.5,-0.2) -- (-2,-0.8) node[below]{инвертор};
+\draw[thin] (-4.5,0) -- (-4.5,{sqrt(25-4.5*4.5)});
+\draw[thin] (4.5,-0.1)--(4.5,-1.3) (5,-0.6)--(5,-1.3);
+\draw (4.75,-1.3) node[below]
+{$\displaystyle \frac{\scriptstyle{\Delta}U_\gamma}{E_{d0}}$};
+\draw[<->] (0.8,0)arc(0:72:0.8) node[midway,above right] {$\phi$};
+\end{tikzpicture}
+
+\begin{equation}
+S_1 \textcyrillic{ (в относительных единицах) } = \frac{S_{1}}{E_{d0}I_d}
+\approx 1
+\end{equation}
+Академически не точно, но с точностью доли процента.
+
+При $\alpha=0$, при отсутствии $\gamma$, $cos\phi = 1$, значит,
+полная мощность равна активной мощности.
+
+\begin{equation}
+S_{1max} \approx E_{d0}I_d
+\end{equation}
+значит $\alpha=0$, $\gamma=0$. $S_1$ с достаточно большой точностью
+можно считать равным $E_{d0}I_d$.
+
+$\left(\overline{q}\right)^2 + \left(\overline{p}\right)^2
+= \left(\overline{s_{1}}\right)^2 = 1 
+$ в относительных единицах.
+
+Провели окружность, но пользоваться с осторожностью. Например, если
+$I_d$ номинал, два номинала.
+Коммутационное $U_{d\textcyrillic{коммутационное}}$ зависит от $I$
+
+$\overline{p} = \textcyrillic{численно равно} = cos\phi$
+
+Круговая диаграмма более информативна.
+
+Представим $cos\phi =0$, но если ток номинальный $Q=100\%$.
+
+Низкое значение(большое значение) $cos\phi$ при глубоком регулировании
+выпрямленного напряжения, или, точнее, большое значение реактивной мощности
+является главным недостатком тиристорных преобразователей.
+
+Второй главный недостаток -- это сравнительно большая величина высших
+гармоник, потребляемых из сети тока.
+
+Достоинство -- высокий КПД
+
+<Провели линию $cos\phi$> Что такое отрицательный $cos\phi$? Это...
+
+$m=6$, $k=5,7,11,13,17,19,23,25$
+
+$$
+\nu \approx \frac{3}{\pi} = 0.955 = \frac{I_\nu}{I}
+$$
+
+$$
+I = \sqrt{I_1^2 + I_\nu^2}
+$$
+
+Хочу найти в абсолютных единицах чему равно $I_\nu$.
+$I_{\nu max} \approx 0.3I$ -- высшие гармоники 30\%. Это доказывает, что
+высших гармоник достаточно много.
+
+\subsection{Непосредственные преобразователи частоты}
+правильное наименование -- с непосредствственной связью, без звена
+постоянного тока.
+
+НПЧ представляет собой реверсивный тиристорный преобразователь, выпрямленное
+значение которого изменяется с заданной частотой. Выпрямленное напряжение
+изменяется по величине и знаку.
+
+\begin{tikzpicture}\draw
+(0,0)to[short,o-](0,1.5)--(0.5,1.5)
+(0.5,0.5)rectangle(3.5,2.5)
+(1,1)to[Ty](3,1)--(3,2)to[Ty](1,2)--(1,1)
+(3.5,1.5)--(4,1.5)to[short,-o](4,0)
+(2,2.5)--(2,3)
+(2,3.5)circle(0.5)
+(2.5,3.2) node[right] {m фаз}
+(2,4.3)circle(0.5) 
+(2,4.8)--(2,5.3)--(1.7,5.8)
+(2,5.5)node[right]{Q}
+(2,5.8)to[short,-*](2,6.3)
+(0,6.3)--(4,6.3)
+(1,6.1)--(1.4,6.5)
+(0.85,6.1)--(1.25,6.5)
+(0.7,6.1)--(1.1,6.5)
+;\end{tikzpicture}
+
+\hspace{-4cm}
+\begin{tikzpicture}
+ \begin{scope}[xscale=1.3,yscale=2.8]
+    \newcommand{\alphaa}{68 * pi / 180}
+    \newcommand{\betaa}{200 * pi / 180}
+    \newcommand{\gammaa}{82 * pi / 180}
+
+    \draw[thin, ->] (-2*pi/3, 0) -- (4*pi+0.3,0) node[right] {$\omega t$};
+    \draw[thin, ->] (0,0) -- (0,1.3) node[left] {$U$};
+
+    \foreach \x/\xtext in {{-pi/6}/{-\frac{\pi}{m}}, 0,{pi}/\pi,
+      {2*pi}/{2\pi}, {3*pi}/{3\pi}}
+    \draw (\x,0.1) -- (\x,-0.1) node [below] {$\xtext$};
+
+   % Vs
+    \draw[domain=-2*pi/3:4*pi, help lines, smooth,samples=200]
+    plot (\x,{sin((\x + pi/6) r)});
+
+    \draw[domain=-2*pi/3:4*pi, help lines, smooth,samples=200]
+    plot (\x,{sin((\x + pi / 3 + pi/6) r)});
+
+    \draw[domain=-2*pi/3:4*pi, help lines, smooth]
+    plot (\x,{sin((\x + 2 * pi / 3 + pi/6) r)});
+
+    \draw[domain=-2*pi/3:4*pi, help lines, smooth,samples=200]
+    plot (\x,{sin((\x + 3*pi / 3 + pi/6) r)});
+
+    \draw[domain=-2*pi/3:4*pi, help lines, smooth,samples=200]
+    plot (\x,{sin((\x + 4 * pi / 3 + pi/6) r)});
+
+    \draw[domain=-2*pi/3:4*pi, help lines, smooth]
+    plot (\x,{sin((\x + 5 * pi / 3 + pi/6) r)});
+
+  %red
+\draw[domain=-2*pi/3:-pi/6,red]
+ plot (\x,{sin((\x + pi/6 + 2*pi/3) r)+0.02});
+\draw[domain=-pi/6:pi/6+pi/6,red]
+ plot (\x,{sin((\x + pi/6 + pi/3) r)+0.02})
+-| (pi/3, {sin((pi/3 + pi/6) r)+0.03});
+\draw[domain=pi/3:pi - pi/6,red]
+plot (\x,{sin((\x + pi/6) r)+0.03})
+-| (pi - pi/6, {sin((pi-pi/3) r)+0.03});
+\draw[domain=pi - pi/6:pi+pi/3,red]
+plot (\x,{sin((\x - pi/6) r)+0.03})
+-| (pi+pi/3, {sin((pi-pi/6) r)+0.03});
+\draw[domain=pi+pi/3:pi+pi/3+pi/6 + pi/3,red]
+plot (\x,{sin((\x - pi/3 - pi/6) r)+0.03})
+-| (2*pi-pi/6,{sin((pi) r)+0.03});
+\draw[domain=2*pi-pi/6:2*pi-pi/6+pi/6 + pi/3,red]
+plot (\x,{sin((\x - 2*pi/3 - pi/6) r)-0.03})
+-| (2*pi+ pi/3,{sin((pi+ pi/6) r)-0.02});
+\draw[domain=2*pi+ pi/3:2*pi+ pi/3+pi/6 + pi/3,red]
+plot (\x,{sin((\x - pi - pi/6) r)-0.02});
+\draw[domain=3*pi-pi/6:3*pi-pi/6+pi/6 + pi/3,red]
+plot (\x,{sin((\x + pi/3 + pi/6) r)})
+-| (3*pi+ pi/3,{sin((3*pi+ pi/3 + pi/6) r)});
+\draw[domain=3*pi+ pi/3:3*pi+ pi/3+pi/6 + pi/3,red]
+plot (\x,{sin((\x + pi/6) r)})
+-| (4*pi-pi/6,{sin((4*pi-pi/6-pi/6) r)});
+\draw[domain=4*pi-pi/6:4*pi,red]
+plot (\x,{sin((\x - pi/6) r)});
+
+% blue
+\draw[domain=-pi/6:pi/6+pi/6+pi/6,blue]
+ plot (\x,{sin((\x + pi/6 + pi/3) r)-0.02})
+-| (pi/2,{sin((pi/2 + pi/6) r)-0.03});
+\draw[domain=pi/6+pi/6+pi/6:pi/2+2*pi/3,blue]
+plot (\x,{sin((\x + pi/6) r)-0.03})
+-| (pi/2+2*pi/3, {sin((pi/2+2*pi/3 - pi/6) r)-0.02});
+\draw[domain=pi/2+2*pi/3:pi/2+4*pi/3+0.03,blue]
+plot (\x,{sin((\x - pi/6) r)-0.02});
+\draw[domain=pi/2+4*pi/3:pi/2+6*pi/3,blue]
+plot (\x,{sin((\x - pi/3 - pi/6) r)+0.02});
+
+
+    % Vo and Io
+%    \foreach \qq [evaluate=\qq as \qqshft using \qq*pi/3] in {-1,...,2}
+%     {
+%      \begin{scope}[xshift=\qqshft cm,
+%          every path/.style={ultra thick, color=red}]
+        %Vo
+%        \draw[domain={pi/6+\gammaa-pi/2}:\alphaa]
+%        plot (\x,{cos(\x r)})
+%        -| (\alphaa,{cos((\alphaa - pi/3) r)/2 + cos(\alphaa r)/2})
+%        [domain=\alphaa:\gammaa]
+%        plot (\x,{cos((\x - pi/3) r)/2 + cos(\x r)/2 })
+%        -| (\gammaa, {cos((\gammaa - pi/3) r) })
+%        ;
+%       \end{scope}
+%     }
+\end{scope}
+\end{tikzpicture}
+
+$\alpha$ изменяется периодически $\alpha=f(t)$.
+
+Было
+\begin{equation}
+E_d = E_{d0}Cos\alpha
+\label{lec8_1}
+\end{equation}
+, $\alpha=f(t)$
+
+\begin{equation}
+E_d = E_m Cos\left(\phi_\textcyrillic{нач.} + w_\textcyrillic{вых.}t\right)
+\label{lec8_2}
+\end{equation}
+где, $w_\textcyrillic{вых.} = 2\pi f_\textcyrillic{вых.}$
+
+Приравняв \ref{lec8_1} и \ref{lec8_2} находим:
+
+$$
+Cos\alpha = \frac{E_m}{E_{d0}} Cos\left(\phi_\textcyrillic{нач.} + w_\textcyrillic{вых.}t\right)
+$$
+
+\begin{equation}
+\alpha = arccos\left[\frac{E_m}{E_{d0}} Cos\left(\phi_\textcyrillic{нач.} + 
+w_\textcyrillic{вых.}t\right)\right]
+\end{equation}
+
+Частный случай, при $E_m=E_{d0}$
+
+\begin{equation}
+\alpha = \phi_\textcyrillic{нач.} + w_\textcyrillic{вых.}t
+\end{equation}
+
+Это объясняет, почему были сделаны равные приращения на рисунке выше.
+
+Принцип работы при любом числе фаз. 
+
+Было написано $U$, а использую $E$, потому что не учитываем падение на вентилях.
+
+На выходе <было рассмотрено> однофазное напряжение. Но нужно трехфазное. Поэтому 
+такие НПЧ содержат три реверсивных преобразователя.

@@ -1,0 +1,467 @@
+\begin{equation}
+E_{d0} = \frac{m}{\pi}\sqrt{2} E_{2\Phi} Sin\frac{\pi}{m}
+\end{equation}
+-- выпрямленная ЭДС неуправляемого преобразователя
+
+\begin{equation}
+E_d = E_{d0} Cos \alpha
+\end{equation}
+-- выпрямленная ЭДС управляемого преобразователя
+
+\begin{equation}
+U_d = E_{d} - U_0 - \frac{m}{2\pi} X_\Phi I_d - I_d \left\{
+R_\Phi + \left(r_\phi + R_D\right) \left( 1 - \frac{\gamma m}{4 \pi}\right) 
+\right\}
+\label{three}
+\end{equation}
+-- Выпрямленное напряжение для угла $\alpha$, или максимальное (при $\alpha=0$).
+
+$U_0$ -- напряжение на вентиле, $R_D$ -- дифференциальное сопротивление вентиля.
+$r_\phi$ -- полное эквивалентное сопротивление фазы с учетом сопротивления сети,
+приведённого ко вторичной обмотке, сопротивление проводников.
+
+Для точности отметим член ${\displaystyle \frac{\gamma}{4\pi}}$.
+
+\hspace{-3 cm}
+\begin{tikzpicture}
+  \begin{scope}[xscale=2,yscale=3]
+    \newcommand{\alphaa}{26.0 * pi / 180}
+    \newcommand{\gammaa}{21.0 * pi / 180}
+
+    \draw[thin, ->] (-2.7, 0) -- (5.8,0) node[right] {$\omega t$};
+    \draw[thin, ->] (0,0) -- (0,1.3) node[left] {$U$};
+    
+    \foreach \x/\xtext in {{-pi/3}/{-\frac{\pi}{m}}, 0,
+      {pi/3}/{\frac{\pi}{m}},{pi}/\pi}
+    \draw (\x,0.1) -- (\x,-0.1) node [below] {$\xtext$};
+
+    % A,B,C
+    \draw[domain=-2.7:5.8, smooth, yellow]
+    plot (\x,{cos((\x) r)}); \node[above] at (0.2,1) {$e_k$};
+    \draw[domain=-2.7:5.8, help lines, smooth, green]
+    plot (\x,{cos((\x-2/3*pi) r)}); \node[above] at (2*pi/3+0.2,1) {$e_{k+1}$};
+    \draw[domain=-2.7:5.8, help lines, smooth]
+    plot (\x,{cos((\x-4/3*pi) r)}); \node[above] at (-2*pi/3+0.2,1) {$e_{k-1}$};
+    % (A+B)/2 
+    \draw[domain={pi/3:pi/3+pi}, loosely dotted]
+    plot (\x,{cos(\x r)/2 + cos((\x - 2/3*pi) r)/2});
+
+
+    
+    \foreach \qq [evaluate=\qq as \qqshft using \qq*2*pi/3] in {0,...,1}
+     {
+      \begin{scope}[xshift=\qqshft cm,
+          every path/.style={color=red}]
+
+    % Ed' Ed''
+    \draw[domain={-pi/3 + \alphaa + \gammaa}:
+        {pi/3+\alphaa-0.03},loosely dotted,red]
+    plot ({\x-0.03}, {cos(\x r)-0.03})
+    -| ({pi/3+\alphaa-0.06},  {cos((\alphaa +pi/3-2/3*pi) r)-0.03})
+    [domain={pi/3+\alphaa-0.06}:{pi+\alphaa}]
+    plot ({\x-0.03}, {cos((\x-2/3*pi)r)-0.03});
+
+    \draw[domain={-pi/3 + \alphaa + \gammaa}:
+                 {pi/3+\alphaa+\gammaa+0.03},loosely dashed,red]
+    plot ({\x+0.03}, {cos(\x r)+0.03})
+    -| ({pi/3+\alphaa+\gammaa+0.03},
+                     {cos((\alphaa+\gammaa +pi/3-2/3*pi) r)+0.03})
+    [domain={pi/3+\alphaa+\gammaa+0.03}:{pi+\alphaa}]
+    plot ({\x+0.03}, {cos((\x-2/3*pi)r)+0.03});
+        
+        %Ed
+        \draw[domain={-pi/3 + \alphaa + \gammaa}:{pi/3},ultra thick]
+        plot (\x, {cos(\x r)});
+        \draw[domain={pi/3}:{\alphaa + pi/3},ultra thick]
+        plot (\x,{cos(\x r)})
+        -| (\alphaa+pi/3, {cos((\alphaa + pi/3) r)/2 + cos((\alphaa-pi/3) r)/2})
+        [domain={\alphaa+pi/3}:{\alphaa+pi/3+\gammaa}]
+        plot (\x,{cos(\x r)/2 + cos((\x-2/3*pi) r)/2})
+        -| (\alphaa+pi/3+\gammaa, {cos((\alphaa +pi/3+ \gammaa-2*pi/3) r) })
+        [domain={\alphaa+pi/3+\gammaa}:{pi/3+2*pi/3}]
+          plot(\x,  {cos((\x-2/3*pi) r)})
+        ;        
+       \end{scope}
+     }
+     %hatch
+     \draw[domain=pi/3 + \alphaa:pi/3 + \alphaa+\gammaa,red,
+         pattern=north east lines,pattern color=red]
+       ({pi/3+\alphaa},  {cos((\alphaa +pi/3-2/3*pi) r)}) --
+     plot (\x,{cos(\x r)/2 + cos((\x - 2/3*pi) r)/2});
+     \draw[domain=pi/3 + \alphaa:pi/3 + \alphaa+\gammaa,red,
+       pattern=north east lines,pattern color=red]
+     plot (\x,{cos((\x - 2/3*pi) r)})
+     -| ({pi/3 + \alphaa+\gammaa},{cos((pi/3 + \alphaa+\gammaa) r)/2
+       + cos((pi/3 + \alphaa+\gammaa - 2/3*pi) r)/2});
+     %
+     \node[above,color=red] at ({\gammaa + pi/3},1) {$e_{d\:'}$};
+     \draw[thin,->,color=red,dotted]  ({\gammaa + pi/3},1) --
+     ({\gammaa + pi/3},{cos((pi/3+\alphaa - 2*pi/3) r)+0.05}); 
+     \node[below,color=red] at ({pi-pi/6},-0.5) {$e_{d\:''}$};
+     \draw[thin,->,color=red,dashed] ({pi-pi/6},-0.5) --
+     ({pi/3+\alphaa+\gammaa+0.1},{cos((pi/3+\alphaa+\gammaa) r)+0.1});
+     \node[below] at (pi+0.3, -0.6) {${\displaystyle \frac{e_k + e_{k+1}}{2}}$};
+     \draw[thin,->] (pi+0.2,-0.6) --
+     (pi+0.3,{cos((pi+0.3) r)/2 + cos((pi-2*pi/3+0.3) r)/2 -0.1});
+     \draw[thin] (pi/3, -0.35) -- (pi/3,-0.8);
+     \draw[thin] (pi/3+\alphaa,-0.1) -- (pi/3+\alphaa, -0.8);
+     \draw[thin,->] (pi/3, -0.6) -- (pi/3+\alphaa,-0.6);
+     \node[left] at (pi/3, -0.6) {$\alpha\:'=\alpha$};
+     \draw[thin] (pi/3+\alphaa+\gammaa,-0.35) --
+     (pi/3+\alphaa+\gammaa,-0.8);
+     \draw[thin] (pi/3-0.05,-0.65) -- (pi/3+0.05,-0.55);
+     \draw[thin,->] (pi/3+\alphaa-0.25,-0.75) -- (pi/3+\alphaa,-0.75);
+     \draw[thin,<-] (pi/3+\alphaa+\gammaa,-0.75) --
+     (pi/3+\alphaa+\gammaa+0.3,-0.75) node[below] {$\gamma$};
+     \draw[thin] (pi, 0.55) -- (pi,1.2);
+     \draw[thin] (pi +\alphaa + \gammaa,1) -- (pi +\alphaa + \gammaa,1.2);
+     \draw[thin,->] (pi,1.15) -- (pi +\alphaa + \gammaa,1.15)
+     node[right] {$\alpha\:'\,' = \alpha+\gamma$};
+     \draw[thin] (pi-0.05,1.1) -- (pi+0.05,1.2);
+  \end{scope}
+  \end{tikzpicture}    
+
+Почти в каждом билете будет задачка, в которой придется рисовать.
+кривую
+\begin{tikzpicture}
+  \draw[ultra thick,red] (0,0) -- (1,0);
+  \end{tikzpicture}
+можно получить как полусумму двух кривых $e_{d\:'}$
+\begin{tikzpicture}
+  \draw[thick,loosely dotted,red] (0,0) -- (1,0);
+\end{tikzpicture}
+и кривой $e_{d\:'\:'}$
+\begin{tikzpicture}
+  \draw[thick,loosely dashed,red] (0,0) -- (1,0);
+\end{tikzpicture}.
+
+В прошлый раз было убедительно доказано, что при соединении двух ЭДС
+с равными внутренними сопротивлениями суммарная ЭДС будет
+полусуммой этих ЭДС.
+
+Из-за индуктивности ток в $k$-й фазе спадает с конечной скоростью, а в
+$k+1$ -й нарастает с конечной скоростью. Разность ЭДС $e_{k+1} - e_k$
+падает на сопротивлении. Площадка
+\begin{tikzpicture}
+  \begin{scope}[xscale=2,yscale=3]
+      \newcommand{\alphaa}{26.0 * pi / 180}
+    \newcommand{\gammaa}{21.0 * pi / 180}
+         %hatch
+         \draw[color=red,domain=pi/3 + \alphaa:pi/3 + \alphaa+\gammaa,
+           pattern=north east lines,pattern color=red]
+         ({pi/3+\alphaa},  {cos((\alphaa +pi/3-2/3*pi) r)}) --
+         % (A+B)/2
+         plot (\x,{cos(\x r)/2 + cos((\x - 2/3*pi) r)/2})
+         %B
+         plot (\x,{cos((\x - 2/3*pi) r)})
+         -| ({pi/3 + \alphaa+\gammaa},{cos((pi/3 + \alphaa+\gammaa) r)/2
+           + cos((pi/3 + \alphaa+\gammaa - 2/3*pi) r)/2});
+         
+  \end{scope}
+\end{tikzpicture}
+показывает падение напряжения из-за индуктивности фазы.
+Напомню, $X_\phi = 2\pi f L_\phi$ (индуктивность это величина отношения
+${\displaystyle \frac{\textcyrillic{потока}}{\textcyrillic{к току}}}$,
+где магнитный поток--это магнитный поток рассеяния,
+обусловленный током нагрузки, а не током намагничивания.
+\begin{tikzpicture}
+  \begin{scope}[xscale=1.7,yscale=2.8]
+          \newcommand{\alphaa}{26.0 * pi / 180}
+    \newcommand{\gammaa}{21.0 * pi / 180}
+     % I
+     \draw[thin, ->] (-1.0, -1.7) -- (2,-1.7) node[right] {$\omega t$};
+     \draw[thin, ->] (0,-1.9) -- (0,-1.2) node[left] {$I$};
+
+     \draw[green] ({\gammaa - pi/3},  -1.4) -- (\alphaa, -1.4);
+     \draw[green] (\alphaa, -1.4) -- (\gammaa, -1.7);
+     \draw[green] (\gammaa, -1.7) -- ({\alphaa + pi/3},-1.7);
+
+     \draw[yellow] ({\gammaa - pi/3},  -1.7) -- (\alphaa, -1.7);
+     \draw[yellow] (\alphaa, -1.7) -- (\gammaa, -1.4);
+     \draw[yellow] (\gammaa, -1.4) -- ({\alphaa + pi/3},-1.4);
+
+     \draw[thin] (\alphaa,-1.65) -- (\alphaa,-1.9);
+     \draw[thin] (\gammaa,-1.65) -- (\gammaa,-1.9);
+     \draw[thin, ->] ({\alphaa-pi/12}, -1.8) -- (\alphaa,-1.8);
+     \draw[thin, <-] (\gammaa,-1.8) -- ({\gammaa+pi/6},-1.8) node[below] {$\gamma$};
+     \draw[thin,<->] ({(\gammaa+\alphaa)/2+0.6},-1.7) --
+     ({(\gammaa+\alphaa)/2+0.6},-1.4);
+     \node[left] at  ({(\gammaa+\alphaa)/2+0.6},-1.55) {$I_d$};
+  \end{scope}
+\end{tikzpicture}
+Делали допущение $i_d = I_d$ -- мгновенное равно среднему, пульсаций нет.
+Уменьшить пульсации до нуля мы не можем, но уменьшить до уровня, когда
+пульсациями можем пренебречь технически возможно.
+
+Мгновенное значение ЭДС при угле регулирования $\alpha$ и угле коммутации
+$\gamma$ представим в виду полусуммы
+
+$$
+e_{\alpha,\gamma} = \frac{e_{\begin{tikzpicture}
+  \draw[thick,dotted,red] (0,0) -- (0.5,0);
+\end{tikzpicture}} +e_{
+\begin{tikzpicture}
+  \draw[thick,dashed,red] (0,0) -- (0.5,0);
+\end{tikzpicture}}}{2} =
+\frac{e_{d\:'} + e_{d\:''}}{2} =
+$$
+Это значит, что каждая из них кривая мгновенного напржения у которого нет $\gamma$.
+$$
+=\frac{e_{d\:'}(\alpha\:' = \alpha, \gamma\:' =0) +
+e_{d\:''}(\alpha\:'' = \alpha + \gamma, \gamma\:''=0)}{2} =
+$$
+
+\begin{tikzpicture}
+  \draw[thick,dashed,red] (0,0) -- (0.5,0);
+\end{tikzpicture} -- при угле $\alpha\:'' = \alpha + \gamma$
+
+$$
+E_d(\alpha,\gamma) = \frac{E_{d'}(\alpha,\gamma=0) +
+  E_{d''}(\alpha'' = \alpha + \gamma, \gamma'' = 0)
+}{2} 
+$$
+
+Для чего это делаем. Нужно проинтегрировать на интервале повторяемости
+
+$$
+E_d = \frac{E_{d0} cos \alpha' + E_{d0} cos \alpha''}{2} =
+E_{d0}\frac{cos \alpha + cos(\alpha + \gamma)}{2}
+$$
+
+$$
+  E_d = E_{d0}\frac{cos \alpha + cos(\alpha + \gamma)}{2}
+$$
+
+Проанализируем результат.
+На каждом интервале повторяемости теряем эту площадку
+\begin{tikzpicture}
+  \begin{scope}[xscale=2,yscale=3]
+      \newcommand{\alphaa}{26.0 * pi / 180}
+    \newcommand{\gammaa}{21.0 * pi / 180}
+          %hatch
+          \draw[color=red,domain=pi/3 + \alphaa:pi/3 + \alphaa+\gammaa,
+            pattern=north east lines,pattern color=red]
+          ({pi/3+\alphaa},  {cos((\alphaa +pi/3-2/3*pi) r)}) --
+          % (A+B)/2
+          plot (\x,{cos(\x r)/2 + cos((\x - 2/3*pi) r)/2})
+          %B
+          plot (\x,{cos((\x - 2/3*pi) r)})
+          -| ({pi/3 + \alphaa+\gammaa},{cos((pi/3 + \alphaa+\gammaa) r)/2
+            + cos((pi/3 + \alphaa+\gammaa - 2/3*pi) r)/2});          
+\end{scope}
+\end{tikzpicture} -- ${\scriptstyle \Delta}E_d$ -- разница между $e_{d'}$
+и $e_{d''}$
+
+\begin{equation}
+  E_d = E_{d0}\frac{cos \alpha + cos(\alpha + \gamma)}{2}
+  \end{equation}
+
+$$
+{\scriptstyle \Delta}E_d = \underbrace{E_d(\alpha,\gamma=0)}_
+{\textcyrillic{без коммутации}} - \underbrace{E_d(\alpha,\gamma\ne 0)}_
+{\textcyrillic{при  реальном }\gamma} 
+$$
+
+Смотрим внимательно на уравнение (\ref{three}) где учтено ${\scriptstyle \Delta}E_d$.
+Отметим $X_\phi$ -- падение на индуктивности. Кажущаяся нелепость:
+Постоянный ток умножается на индуктивность. Это есть ЭДС самоиндукции
+$\frac{m}{2\pi}X_\phi I_d$ -- коммутационное.
+В учебниках пишут ${\scriptstyle \Delta}U$, у нас написано $E$, подчеркивая
+что природа этого -- падение на самоиндукции.
+
+\begin{equation}
+{\scriptstyle \Delta}U_{d\gamma} = {\scriptstyle \Delta}E_{d\gamma} =
+E_{d0}\frac{cos\alpha -cos(\alpha + \gamma)}{2} =\frac{m}{2\pi}X_\phi I_d
+\label{stressed}
+\end{equation}
+
+Коэффициэнт $R_{K} ={\displaystyle \frac{m}{2\pi}X_\phi}$ мы умножаем на ток
+нулевой частоты. Это фикция, но так говорят, мы упоминаем шуткаи ради.
+Но это сопротивление не греется от проходящего тока, поэтому оно фиктивное.
+
+Из предыдущего (\ref{stressed}) уравнения можем найти $\gamma$
+
+\begin{equation}
+  \gamma = arccos\left[cos \alpha -\left(\frac{\frac{\displaystyle m}
+      {\displaystyle \pi}X_\phi I_d}{E_{d0}}\right)\right] - \alpha  
+\end{equation}
+
+В уравнении (\ref{stressed}) ${\scriptstyle \Delta}U_{d\gamma}$ индекс $\gamma$
+подчёркивает, что это падение напряжения вследствие угла коммутации $\gamma$
+
+\begin{equation}
+  \gamma = arccos\left[cos \alpha -2\left(\frac{{\scriptstyle \Delta}U_{d\gamma}}
+         {E_{d0}}\right)\right] - \alpha  
+\end{equation}
+
+\begin{equation}
+  \gamma = arccos\left[cos \alpha -\left(2\frac{R_K I_d}
+         {E_{d0}}\right)\right] - \alpha  
+\end{equation}
+
+где
+\begin{equation}
+  R_K = \frac{m}{2\pi}X_\phi
+\end{equation}
+
+Еще раз перепишем формулу (\ref{three}):
+$$
+U_d = E_d - U_0 - I_d\left[R_K +R_{\textcyrillic{эквивалентное}}\right]
+$$
+При практических расчётах приближённно $U_0$ мало, также пренебрегают
+влиянием $\gamma$ на коммутационное сопротивление.
+$$
+\hspace{-2 cm}
+U_d = E_{d0} \;cos\;\alpha - I_d\left(R_K +
+\underbrace{r_\phi}_{
+  \begin{array}{c}
+    \textcyrillic{на стороне переменного} \\
+      \textcyrillic{тока выпрямителя}
+    \end{array}
+} +
+\underbrace{R_\Phi}_{
+    \begin{array}{c}
+      \textcyrillic{на стороне постоянного}\\
+      \textcyrillic{тока выпрямителя}
+      \end{array}
+}
+\right)
+$$
+Эту формулу применяют для практических расчётов.
+
+$$
+R_K =\frac{m}{2\pi} X_\phi -\left(r_\phi + R_D\right) \frac{\gamma}{4\pi}
+$$
+-- эта формула для совсем точных расчётов.
+Активное сопротивление на постоянном токе уменьшается.
+
+Уравнение (\ref{three}) -- статические характеристики. В статическом режиме
+$\alpha$ и $I$ не меняются. То что присутствует $\gamma$ -- его нужно
+исключить, решив уравнение относительно $\gamma$
+
+$
+U_d = F(\alpha,I_d) 
+$ -- можно рассматривать уравнение как функцию двух переменных.
+
+$U_d = f(\alpha)$ при $I_d = const$ -- {\bf регулировочные характеристики}. Почему
+во множественном числе? потому что для разных $I_d$.
+
+$U_d = f(I_d)$ при $\alpha=const$ -- {\bf внешние характеристики}.
+
+Как их строят? Строят семейство регулировочных характеристик и семейство
+внешних характеристик.
+
+При $I_d$ малых (пренебрегаем падением на внутренних элементах). Это одна
+из регулировочных характеристик, причём основная, а внешних -- много.
+
+\subsection{регулировочные характеристики}
+характеристики строятся в относительных единицах.
+
+
+
+\begin{tikzpicture}
+  \begin{scope}[xscale=3.5,yscale=4.5]
+    \newcommand{\alphaa}{26.0 * pi / 180}
+    \newcommand{\gammaa}{21.0 * pi / 180}
+
+    \draw[thin, ->] (0, 0) -- (3.5,0) node[right] {$\alpha$};
+    \draw[thin, ->] (0,-1.2) -- (0,1.3) node[left] {$\frac{U_d}{E_{d0}}$};
+    \draw[thin,loosely dashed] (0,-1) -- (pi,-1);
+    
+    \foreach \x/\xtext in {{pi/6}/{\frac{\pi}{6}}, {pi/3}/{\frac{\pi}{3}},
+      {pi/2}/{\frac{\pi}{2}}, {2*pi/3}/\frac{2\pi}{3},
+      {5*pi/6}/\frac{5\pi}{6},
+      {pi}/{\pi}}
+    \draw (\x,0.1) -- (\x,-0.1) node [below] {$\xtext$};
+
+    \foreach \y/\ytext in {-1/-1,-0.5/-0.5,0.5/0.5,1,1}
+    \draw (0.1,\y) -- (-0.1,\y) node [left] {$\ytext$};
+
+    % A
+    \draw[domain=0:pi, help lines, smooth]
+    plot (\x,{cos((\x) r)});
+    % нижняя граница
+    \draw[domain=0:{pi-(23/180)*pi}, help lines, smooth,dashed]
+    plot (\x,{cos((\x) r) - 0.08});
+    %
+    \draw[thin,<->] ({pi/4}, {cos((pi/4) r)}) --
+    ({pi/4}, {cos((pi/4) r) - 0.08});
+    \draw[thin] ({pi/4}, {cos((pi/4) r) - 0.04}) --
+    ({pi/4+0.3}, {cos((pi/4) r)}) node[right]
+         {${\displaystyle \frac{{\scriptstyle \Delta}U_d}{E_{d0}}}$};
+    %
+    \node[below] at ({pi/6},0.45)
+         {$\begin{array}{c}
+             \textcyrillic{выпрямительный}\\
+             \textcyrillic{режим}
+           \end{array}$
+         };
+    \node[below] at ({5*pi/6},-0.3)
+         {$\begin{array}{c}
+             \textcyrillic{инверторный}\\
+             \textcyrillic{режим}
+           \end{array}$
+         };
+
+         \node[below] at (2*pi/3,-0.85) {${\scriptstyle \Delta}U_d>0$};
+         \draw[thin,->] (2*pi/3,-0.85) -- (2*pi/3+0.25,-0.8);
+         \draw[thin,<-] (5*pi/6-0.1,-0.8) -- (5*pi/6+0.4,-0.7)
+         node[right]
+         {$\begin{array}{c}
+             {\displaystyle \frac{E_d}{E_{d0}} {\textcyrillic{-- всё падение}}}\\
+             {\textcyrillic{напряжения}}\approx 0\\
+             {\textcyrillic{пренебрегаем всем}}
+             \end{array}$};
+  \end{scope}
+\end{tikzpicture}
+
+$\alpha\ge 0$, потому что не сможем включить раньше. Какой теоретический
+предел $\alpha$
+\begin{tikzpicture}
+  \begin{scope}[xscale=1.5,yscale=3]
+    \newcommand{\alphaa}{26.0 * pi / 180}
+    \newcommand{\gammaa}{21.0 * pi / 180}
+    \draw[thin, ->] (0, 0) -- (pi+pi/6+pi/3,0) node[right] {$\omega t$};
+    \draw[thin, ->] (0,0) -- (0,1.3) node[left] {$U$};
+    
+    \foreach \x/\xtext in {{pi/6}/{\frac{\pi}{6}},
+      {pi/3}/{\frac{\pi}{3}}, {pi}/{\pi},{4*pi/3}/{\frac{4\pi}{3}}}
+    \draw (\x,0.1) -- (\x,-0.1) node [below] {$\xtext$};
+
+    % A,B,C
+    \draw[domain=-0.1:{pi/6+pi+pi/3}, smooth, yellow]
+    plot (\x,{cos((\x) r)}); \node[above] at (0.2,1) {$e_k$};
+    \draw[domain=-0.1:{pi/6+pi+pi/3}, help lines, smooth, green]
+    plot (\x,{cos((\x-2/3*pi) r)}); \node[above] at (2*pi/3+0.2,1) {$e_{k+1}$};
+
+    \draw[thin] ({pi/3},-0.35) -- (pi/3,-1.27);
+    \draw[thin] ({4*pi/3},{cos((4*pi/3) r)-0.1}) --  ({4*pi/3},-1.27);
+    \draw[thin,<->] ({pi/3},-1.15) -- ({4*pi/3},-1.15);
+    \node[below] at ({(pi/3+4*pi/3)/2},-1.25)
+         {теоретический диапазон $\alpha=\pi$};
+  \end{scope}
+\end{tikzpicture}
+
+Обычно строят графики $I_d \approx 0$ и $I_d\approx I_{\textcyrillic{номинальный}}$
+(близко к номиналу). Падение
+\begin{tikzpicture}
+  \begin{scope}
+     \draw[thin,<->] (0, 0.25) --
+    (0, -0.25);
+    \draw[thin,<-] (0.1, 0) --   (0.5, 0) node[right]
+         {${\displaystyle \frac{{\scriptstyle \Delta}U_d}{E_{d0}}}$};
+  \end{scope}
+  \end{tikzpicture}
+-- единицы процента, до $10\%$. $30\%$ быть не может, поскольку, 15\% падение
+на реактивных и 15\% падение на активных сопротивлениях, а 15\% потерь
+недопустимо для КПД выпрямителей. У выпрямителях КПД $\approx$ 95\%.
+
+Выпрямленное напряжение становится меньше 0, как это понять? $I>0$ всегда.
+Это не диод, $\alpha \ne 0$, это тиристор. $I\cdot U<0$, значит преобразователь
+преобразует в обратном направлении. И КПД $\ne 95\%$, потом поговорим об этом
+подробнее.
+
+Когда $U \approx 0$, напряжение примерно 10\% от номинала, КПД уменьшается не
+потому что увеличиваются потери, а потому что уменьшается мощность.
+
+$P_d = U_dI_d <0$ -- инверторный режим. Инверторный режим преобразователя обычно имеет место когда $E_d<0$ и $\alpha>90^\circ$.
