@@ -1,0 +1,54 @@
+%http://tex.stackexchange.com/questions/132076/how-to-draw-a-dc-motor-in-circuitikz`
+% prepare to create bipoles
+
+\makeatletter
+\def\TikzBipolePath#1#2{\pgf@circ@bipole@path{#1}{#2}}
+\def\CircDirection{\pgf@circ@direction}
+
+%\pgf@circ@Rlen = \pgfkeysvalueof{/tikz/circuitikz/bipoles/length}
+
+\makeatother 
+
+\newlength{\ResUp} \newlength{\ResDown}
+\newlength{\ResLeft} \newlength{\ResRight}
+
+% set default motor size
+
+\ctikzset{bipoles/motor/height/.initial=.8}
+\ctikzset{bipoles/motor/width/.initial=.8}
+
+% create motor shape
+
+\pgfcircdeclarebipole{}
+ {\ctikzvalof{bipoles/motor/height}}
+ {motor}
+ {\ctikzvalof{bipoles/motor/height}}
+ {\ctikzvalof{bipoles/motor/width}}
+ {
+    \pgfsetlinewidth{\ctikzvalof{bipoles/thickness}\pgfstartlinewidth}
+    \pgfextractx{\ResRight}{\northeast}
+    \pgfextracty{\ResUp}{\northeast}
+    \pgfextractx{\ResLeft}{\southwest}
+    \pgfextracty{\ResDown}{\southwest}
+
+  \pgfpathmoveto{\pgfpoint{0.775\ResLeft}{0.2\ResDown}}
+\pgfpathlineto{\pgfpoint{\ResLeft}{0.2\ResDown}}
+  \pgfpathlineto{\pgfpoint{\ResLeft}{0.2\ResUp}}
+  \pgfpathlineto{\pgfpoint{0.775\ResLeft}{0.2\ResUp}}
+\pgfpathellipse{\pgfpointorigin}{\pgfpoint{0.8\ResRight}{0cm}}
+    {\pgfpoint{0cm}{0.8\ResUp}}
+  \pgfpathmoveto{\pgfpoint{0.775\ResRight}{0.2\ResDown}}
+    \pgfpathlineto{\pgfpoint{\ResRight}{0.2\ResDown}}
+  \pgfpathlineto{\pgfpoint{\ResRight}{0.2\ResUp}}
+  \pgfpathlineto{\pgfpoint{0.775\ResRight}{0.2\ResUp}}
+  \pgfusepath{draw} %draw motor
+    \pgftext[rotate=-\CircDirection]{\textsf{M}}
+ }
+
+% create motorto-path style
+
+\def\motorpath#1{\TikzBipolePath{motor}{#1}}
+\tikzset{motor/.style = {\circuitikzbasekey, /tikz/to path=\motorpath, l=#1}}
+
+% end of setup
+
