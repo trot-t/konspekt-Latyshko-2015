@@ -28,6 +28,10 @@
 \author{ Прокшин Артем \\
 \small ЛЭТИ\\
 \small \texttt{taybola@gmail.com}}
+%\usetikzlibrary{circuits}
+%\usetikzlibrary{circuits.ee}
+%\usetikzlibrary{circuits.ee.IEC}
+%\usetikzlibrary{circuits.logic.IEC}
 
 \usetikzlibrary{calc}
 \ctikzset{bipoles/thickness=1}
@@ -35,16 +39,52 @@
 \ctikzset{bipoles/diode/height=.375}
 \ctikzset{bipoles/diode/width=.3}
 \ctikzset{tripoles/thyristor/height=.8}
-\ctikzset{tripoles/thyristor/width=1}
+%\ctikzset{tripoles/thyristor/width=1}
+\ctikzset{tripoles/thyristor/width=0.8}
 \ctikzset{bipoles/vsourceam/height/.initial=.7}
 \ctikzset{bipoles/vsourceam/width/.initial=.7}
 \tikzstyle{every node}=[font=\small]
 \tikzstyle{every path}=[line width=0.8pt,line cap=round,line join=round]
 
+\ctikzset{resistor = european}
+\ctikzset{tripoles/thyristor/height=0.35}
+\ctikzset{tripoles/thyristor/height 2=0.4} 
+%\ctikzset{tripoles/thyristor/width=0.35} 
+\ctikzset{tripoles/thyristor/diode width left=0.35}
+\ctikzset{tripoles/thyristor/diode width right=0.35}
+
+\ctikzset{bipoles/cuteindictor/coils/.initial=3}
+\ctikzset{bipoles/americanindictor/coils/.initial=3}
+
+
+\makeatletter
+%% american inductor
+
+\pgfcircdeclarebipole{}{\ctikzvalof{bipoles/americaninductor/height 2}}{americaninductor}{\ctikzvalof{bipoles/americaninductor/height}}{\ctikzvalof{bipoles/americaninductor/width}}{
+    \pgf@circ@res@step=\ctikzvalof{bipoles/americaninductor/width}\pgf@circ@Rlen
+    \pgfsetlinewidth{\pgfkeysvalueof{/tikz/circuitikz/bipoles/thickness}\pgfstartlinewidth} 
+    \pgftransformationadjustments
+    \advance \pgf@circ@res@step by \pgfhorizontaltransformationadjustment\pgflinewidth
+    \divide \pgf@circ@res@step by \ctikzvalof{bipoles/americaninductor/coils}
+    \divide \pgf@circ@res@step by 2
+    \pgf@circ@res@other = \ctikzvalof{bipoles/americaninductor/coil height}\pgf@circ@Rlen
+
+    \pgfpathmoveto{\pgfpoint{\pgf@circ@res@left-\pgfhorizontaltransformationadjustment*0.5*\pgflinewidth}{-\pgfverticaltransformationadjustment*0.4*\pgfstartlinewidth}}%correct value would be 0.5 but arcs are not really flat, therefore 0.4 is better is (almost) all cases
+  \foreach \x in {1,...,\ctikzvalof{bipoles/americaninductor/coils}}
+    {\pgfpatharc{180}{0}{\pgf@circ@res@step and \pgf@circ@res@other}}
+    \pgfsetbuttcap
+    \pgfsetbeveljoin
+    \pgfusepath{stroke}
+}
+\makeatother
+
+
+
 \AddEnumerateCounter{\Asbuk}{\@Asbuk}{\CYRM}
 \AddEnumerateCounter{\asbuk}{\@asbuk}{\cyrm}
 \renewcommand{\theenumi}{(\asbuk{enumi})}
 \renewcommand{\labelenumi}{\asbuk{enumi})}
+
 
 %\title{Силовая энергетика}
 %\date{}
