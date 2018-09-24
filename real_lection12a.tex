@@ -15,12 +15,13 @@
 1й тип будет похлж на ИППН. Наработки, полученные в ИППН будут использоваться в АИ.
 \item трансформатороные, безтрансформаторные
 \end{enumerate}
-24в $\rightarrow$ в переменное, затем через трансформатор увеличить.
+24в $\rightarrow$ в переменное, затем через трансформатор увеличить.\\
 
 Начнем с однофазного АИН
 
 %https://tex.stackovernet.com/ru/q/124245/%D0%BA%D0%B0%D0%BA-%D0%BD%D0%B0%D1%80%D0%B8%D1%81%D0%BE%D0%B2%D0%B0%D1%82%D1%8C-%D1%82%D1%80%D0%B0%D0%BD%D1%81%D1%84%D0%BE%D1%80%D0%BC%D0%B0%D1%82%D0%BE%D1%80-%D1%82%D0%BE%D0%BA%D0%B0-%D0%B2-tikzcircuitikz
-%https://tex.stackexchange.com/questions/355717/circuittikz-4-pinfet-symbol/355802#355802
+%https://tex.stackexchange.com/questions/355717/circuittikz-4-pinfet-symbol/355802#35580
+\begin{wrapfigure}{l}{0.4\linewidth}
 \begin{circuitikz} 
 \draw (1.5,6) node[Lnigbt, bodydiode, rotate=90, xscale=-1] (t1) {};
 \draw (0,6) to[short, o-] (t1.D);
@@ -32,14 +33,185 @@
 \draw (-0.3, 5.9) node() {$+$} (0.3,4.9) node() {$-$} (0.8,4.8) node() {$-$} (2.7,4.8) node() {$+$};
 \draw (0.3,4.1) node() {$+$};
 \draw (-0.3, 3)  node() {$-$};
-\end{circuitikz} 
-
+\end{circuitikz}
+\end{wrapfigure}
 Нулевая схема получится, если включил верхний транзистор. Вторую полуволну получу, если подключу нижний. Знак на транзисторе означает, что транзистор управляется напряжением.
 На сомом деле это два транзистора. Иногда из-за ``нулевой'' точки схема называется нулевой.
 
 Обратим внимание. Когда нагрузка индуктивная, то включать верхний транзистор -- будет перенапряжение. Поэтому всегдя в схеме транзисторы шунтируются обратными
 диодами. При подаче напряжение $+$ $-$ -- запираем диод. Как диоды проводят? При выключении нижний диод поддержит ток при выключении верхнего транзистора. %диода.
 
-${\displaystyle \frac{\partial i}{\partial t}}$ громадное, но установлены диоды, но кроме $L_\text{н}$ может быть индуктивность питания, то беды не миновать.
-Чтобы этого не произошло, устанавливают конденсатор, Большая (полярная) емкость. Параллельно ставят с маленькой паразитной емкостью (внутренней индуктивностью)
+%${\displaystyle \frac{\partial i}{\partial t}}$ громадное, но установлены диоды, но кроме $L_\text{н}$ может быть индуктивность питания, то беды не миновать.
 
+\begin{wrapfigure}{l}{0.3\linewidth}
+\begin{circuitikz} 
+\draw (1.5,6) node[Lnigbt, bodydiode, rotate=90, xscale=-1] (t1) {};
+\draw (0,6) to[short,o-] (t1.D);
+\draw (t1.S) -- (3,6) -- (3,4.5); \draw (0,4.5) -- (0.5,4.5)  to[R] (1.75,4.5) to[L] (3,4.5); \draw (0,4.2) to[short,o-o] (0,4.8);
+\draw[help lines,smooth] (0,3) to[C,o-o] (0,4.2);
+\draw[help lines, smooth] (0,6) to[C,o-o] (0,4.8);
+\end{circuitikz}
+\end{wrapfigure}
+${\displaystyle \frac{\partial i}{\partial t}}$ громадное, но установлены диоды, но кроме $L_\text{н}$ может быть индуктивность питания, то беды не миновать.
+
+Чтобы этого не произошло, устанавливают конденсатор, Большая (полярная) емкость. Параллельно ставят с маленькой паразитной емкостью (внутренней индуктивностью).
+Элетролитический конденсатор, громадная емкость 6000$\mu$F.\\
+
+\begin{minipage}{\textwidth}
+%Параллельно включают маленький несколько pF. В первые пикосекунды ток идет через маленький конденсатор. Он предназначен,
+%чтобы поглотить начальный бросок.
+  \begin{wrapfigure}{r}{0.2\textwidth}
+  \begin{circuitikz}
+    \draw (0,2) to[elko] (0,0);
+    \draw (0,0.4) -- (1,0.4) to[C] (1,1.6) -- (0,1.6);
+    \end{circuitikz}
+\end{wrapfigure}
+Параллельно включают маленький конденсатор несколько pF. В первые пикосекунды ток идет через маленький конденсатор. Он предназначен,
+чтобы поглотить начальный бросок.
+\end{minipage}\\ \\ \\
+
+\begin{minipage}{\textwidth}
+\begin{wrapfigure}{l}{0.2\linewidth}
+  \begin{circuitikz}
+    \draw (0,3) -- (1.5,3) to[C] (1.5,1.5) to[C] (1.5,0) -- (0,0);
+    \draw (0.65,3) to[R] (0.65,1.5) to[R] (0.65,0);
+    \draw (0.65,1.5) to[short,*-*] (1.5,1.5); 
+  \end{circuitikz}  
+\end{wrapfigure}
+Конденсаторы образуют емкостной делитель, который не работает на постоянном токе. Конденсатор нужно шунтировать баллсатным сопротивлением.
+Сопротивление нужно выбрать меньше гарантированного сопротивления утечки конденсатора. Если сопротивление утечки конденсатора 5мОм, то сопротивление
+балластных резисторов выберем в 100 раз меньше сопротивления утечки. Если не ставить сопротивления, то напряжение поделится пропорционально нестабильному
+сопротивлению изоляции C.
+\end{minipage}\\ \\
+
+%\begin{wrapfigure}{l}{0.4\linewidth}
+\begin{circuitikz} \begin{scope}[scale=1.1]
+    \draw (1.5,6) node[Lnigbt, bodydiode, rotate=90, xscale=1] (t1) {};
+    \draw (2.3,5.5) node {VT$_1$} (2.4,6.4) node {VD$_1$};
+    \draw (-1.5,6) node[left] {$+$} to[short,o-] (t1.D);
+    \draw (2.3,3.5) node {VT$_2$} (2.4,2.6) node {VD$_2$};
+\draw (t1.S) -- (3,6) -- (3,4.5); \draw (0,4.5) -- (0.5,4.5)  to[R] (1.65,4.5) to[L]  (2.75,4.5) -- (3,4.5); 
+\draw (1.5,3) node[Lnigbt, bodydiode, rotate=90, xscale=-1] (t2) {};
+\draw (-1.5,3) node[left] {$-$} to[short,o-] (t2.D);
+\draw (t2.S) -- (3,3) -- (3,4.5);
+\draw (0,6) to[R,-*] (0,4.5) to[R] (0,3); 
+\draw (-.8,6) to[C,-*] (-.8,4.5) to[C] (-.8,3);
+\draw (0,4.5) -- (-.8,4.5) node[left] {точка (o)\ \ \ };
+\draw[help lines, smooth] (0.5,4.25) rectangle (2.8,4.75);
+\draw[thin,<-,>=stealth'] (-0.2,3.6) -- (-0.8,2.2) node[below] {50 kV};  
+\draw[thin,<->,>=stealth'] (0,2.3) -- node[midway, below] {$U_\text{н}\text{ маленкое}$} (3,2.3); 
+\draw[thin,<-,>=stealth'] (0.4,3.3) -- (1.1,3.9) -- (3.5,3.9) node[right] {Эта цепь должна быть очень короткая};
+\end{scope}
+\end{circuitikz}
+%\end{wrapfigure}
+
+\begin{circuitikz}
+\usetikzlibrary{calc}
+\usetikzlibrary{decorations.pathreplacing,intersections,calc}
+  \draw[thin,->,>=stealth'] (0,-3) -- (0,3.5) node[left] {$U$};
+  \draw[thin,->,>=stealth'] (0,0) coordinate (x_1) -- (8,0) coordinate (x_2) node[above right] {$t$};
+  \draw (0,-2) -- (1.5,-2) -- (1.5,2) -- (3,2) -- (3,-2) -- (4.5,-2) -- (4.5,2) -- (6,2) -- (6,-2) -- (7.5,-2) -- (7.5,2);
+  \draw (0,-2) node[left] {$\displaystyle -\frac{U_V}{2}$};
+  \draw[thin,loosely dashed] (1.5,2) -- (0,2) node[left] {$\displaystyle \frac{U_V}{2}$};
+  \draw [domain=0:1.5] plot (\x, {-2.6+4*exp(-.8*\x)});        \draw[domain=1.5:6, thin, loosely dashed] plot (\x, {-2.6+4*exp(-.8*\x)});
+  \draw [domain=1.5:3] plot (\x, {2.6 - 4*exp(-.8*(\x-1.5))}); \draw[domain=3:7.5, thin, loosely dashed] plot (\x, {2.6 - 4*exp(-.8*(\x-1.5))});
+  \draw [name path=aa, domain=3:4.5] plot (\x, {-2.6+4*exp(-.8*(\x-3))});    \draw[domain=4.5:7.5, thin, loosely dashed] plot (\x, {-2.6+4*exp(-.8*(\x-3))});
+  \draw [name path=cc, domain=4.5:6] plot (\x, {2.6 - 4*exp(-.8*(\x-4.5))}); \draw[domain=5:7.5, thin, loosely dashed] plot (\x, {2.6 - 4*exp(-.8*(\x-4.5))});
+  \draw [domain=6:7.5] plot (\x, {-2.6+4*exp(-.8*(\x-6))});
+  \draw [very thin, loosely dotted] (0,2.6) -- (7.3,2.6);
+  \draw [thin] (1.5,2) -- (1.5,3.2) (3,2) -- (3,3.2) (4.5,2) -- (4.5,3);
+  \draw [very thin,<->,>=stealth'] (1.5,3) -- (3,3) node[midway,above] {$T/2$};\draw[very thin,<->,>=stealth'] (3,2.8) -- (4.5,2.8) node[midway,above] {$T/2$};
+  \draw [thin] (3,-2) -- (3,-3.2) node (a1) {};
+  \path [name path=bb] (0,0) -- (7,0);
+  \path [name intersections={of=aa and bb,by=E}];
+  \draw [thin] (E) -- ++ (0,-3.2) node (a2) {};
+  \draw [thin] (4.5, -2) -- (4.5, -3.2) node (a3) {};
+  \path [name intersections={of=cc and bb,by=C}];
+  \draw [thin] (C) -- ++ (0,-3.2) node (a4) {};
+  \draw [thin] (6, -2) -- (6, -3.2) node (a5) {};
+  \draw [thin,<->,>=stealth'] (3,-2.9) -- (6,-2.9) node[right] {$\displaystyle T=\frac{1}{f}$};
+  \path (a1.center) -- (a2.center) node[midway, below] {1};
+  \path (a2.center) -- (a3.center) node[midway, below] {2};
+  \path (a3.center) -- (a4.center) node[midway, below] {3};
+  \path (a4.center) -- (a5.center) node[midway, below] {4};
+  \path [name path=dd] (0,.6) -- (7,.6);
+  \path [name intersections={of=aa and dd,by=D}];
+  \draw[thin,->,>=stealth'] (2.5,-3.9) node[right] {нижний транзистор еще не включен} -- (3,-2.7);
+  \draw[thin,->,>=stealth'] (1.6,-4.4) node[right] {ток течет по диоду} -- (D);
+\end{circuitikz}  
+
+% https://tex.stackexchange.com/questions/241959/aligned-circle-around-letter-tikz
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+        \node[shape=circle,draw,minimum size=4mm, inner sep=0pt] (char)
+        {\rule[-3pt]{0pt}{\dimexpr2ex+2pt}#1};}}
+
+
+
+\begin{tabular}{l}
+На интервале \circled1  ток протекает через $VD_2$ --- $i_{VD2}$.\\
+В момент \circled2 транзистор $VT_2$ должен быть открыт. \circled2 --- $i_{VT2}$\\
+\circled3 --- $i_{VD1}$\\
+\circled4 --- $i_{VT1}$
+\end{tabular}
+
+На интервалах \circled2 и \circled4 конденсаторы разряжаются, на интервалах \circled1 и \circled3 -- заряжаются.
+
+На \circled1 ток шел в нижний конденсатор $C_2$, на \circled3 --- в верхний конденсатор $C_1$.
+
+Обратим внимание на маленький момент:
+
+Если
+\begin{circuitikz}[scale=0.3]
+  \draw  (1.5,0) -- (1.5,2) -- (3,2) -- (3,-2) -- (4.5,-2) -- (4.5,0);
+  \path[pattern=north east lines,fill opacity=5,opacity=0.2] (1.5,0) rectangle (3,2);
+  \path[pattern=north east lines,fill opacity=5,opacity=0.2] (3,-2) rectangle (4.5,0);
+\end{circuitikz}
+то в нагрузке постоянная составляющая $U$, значит будет ток $I$.
+
+Если
+\begin{circuitikz}[scale=0.3]
+  \draw [domain=2.04:3] plot (\x, {2.6 - 4*exp(-.8*(\x-1.5))}); 
+  \draw [name path=aa, domain=3:4.5] plot (\x, {-2.6+4*exp(-.8*(\x-3))});
+  \draw [name path=cc, domain=4.5:5.04] plot (\x, {2.6 - 4*exp(-.8*(\x-4.5))});
+  %  \draw [domain=6:7.5] plot (\x, {-2.6+4*exp(-.8*(\x-6))});
+%  \draw [name path=bb] (2.04,0) -- (5.04,0);  
+\end{circuitikz}
+--- тогда нет постоянного тока. Если нагрузка двигатель, то постоянная составляющая очень опасна.
+
+Отличаются на 1\%. Делитель не обеспечивает деление, или равенство полуволн необязательно. $400V - 1\% - 4V$. Сопротивление миллиОмы, то
+$$
+I = \frac{4V}{10\mu\Omega} = \frac{4}{10\cdot 10^{-3}} = 400A
+$$
+Пусть будет $40A$. Что такое $40A$ по сравнению со $100A$? Ток намагничивания $1-2\%$ у трансформатора $500A$ ток намагничивания $10A$.
+
+Во всех инверторах выходное напряжение не должно содержать постоянной составляющей. Постоянная составляющая, даже небольшая, может создать в обмотках питаемого двигателя
+постоянную составляющую тока, которая способна насытить магнитную цепь двигателя. А это, в свою очередь, вызовет резкое увеличение намагничивающего тока.
+Процесс развивается лавинообразно.
+
+У мощного трансформатора, двигателя $X \gg R$. Если $Z$ мало, при номинальном токе $5-7\%$
+$$
+I_\text{ном}\cdot Z_\text{обмоток} = 5\%
+$$
+
+$X \gg R$ то 1\% медь 1\% сталь
+\begin{tabular}{l}
+  $I^2R - 98\%$ \\
+  $IR = 1\%$
+\end{tabular}
+
+Напряжение около $1\%$, то ток номинальный
+
+\begin{tabular}{lll}
+  у двигателя & &\\
+  у трансформатора & 3-4-5\% & ток Х.Х. - 5\% \\
+  асинхронный & 20-30\% даже 40
+\end{tabular}  
+
+А если $6,7\%$ -- уже трансформатор насытится! Точность нужна почти метрологическая. $500A$. Резисторы $50K$.
+
+Самосинхронизация
+
+Для \begin{circuitikz}[scale=0.4]
+\draw (0,0) to[C] (0,1.3) to[C] (0,2.6);
+\end{circuitikz} постоянного тока -- большое сопротивление.
+Если появляется постоянная составляюшая на конденсаторе -- вствечное падение напряжения. Конденсатор подзарядится -- полуволны выровняются. В других схемах может быть придется позаботится.
