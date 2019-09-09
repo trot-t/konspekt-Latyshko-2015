@@ -1,0 +1,296 @@
+\section{Импульсные преобразователи постоянного напряжения}
+
+Постоянное напряжение просто так не трансформируется трансформатором. Тролейбус 800 вольт. В салоне лампочки 12,24 вольта.
+Солнечные батареи -- постоянное небольшое напряжение, а нужно напряжение постоянного тока 220 вольт. 
+
+1) Квадрантность
+
+\begin{tikzpicture}[scale=0.6]
+\draw[->,>=latex](-3,0) -- (3,0) node[right] {$I$};
+\draw[->,>=latex](0,-2) -- (0,3) node[left] {$U$};
+\draw (2.5,1.5) -- (0,1.5) node[left] {$U_\textcyrillic{пит.}$};
+\end{tikzpicture}
+
+2) Тип СПП -- обязательно запираемые. возможно угол искусственной коммутации. Используются силовые транзисторы, запираемые тиристоря и неуправляемые диоды (вспомогательные приборы).
+
+Некоторые типы регулируемые только вниз, некоторые -- только вверх.
+
+\begin{enumerate}
+\itemпонижающие напряжение
+\itemповышающие
+\itemпонижающие и повышающие
+\end{enumerate}
+
+Рассмотрим одноступенчатые преобразователи. Если со звеном постоянного тока -- двухступенчатые.
+Различают трансформаторняе и бестрансформаторные (трансформаторы выполняют вспомогательныю функцию)
+
+\begin{tikzpicture}
+\draw (0,2) to[Ty-,l={$V_s$},o-] (3,2) to[R,l={$R_\textcyrillic{н}$}] (3,0) to[short,-o] (0,0); 
+\draw (0,1) node {$U_\textcyrillic{пит.}$};
+\draw (3.4,2) node {$+$};
+\draw (3.4,0) node {$-$};
+\end{tikzpicture}
+
+\begin{tikzpicture}
+\draw[->,>=latex] (0,0) -- (0,2) node[right] {$U$};
+\draw[->,>=latex] (0,0) -- (8,0) node[right] {$\omega t$};
+\newcommand{\y}{1.8}
+\foreach \x in {2,4,6}
+   \draw ({\x-0.5},0) -- ({\x-0.5},{\y}) -- ({\x},{\y}) -- ({\x},0); 
+
+%\draw[thin,->,>=latex] (1,{\y/2}) -- (1.5,{\y/2});
+%\draw[thin,->,>=latex] (2.5,{\y/2}) -- (2,{\y/2});
+\draw[thin,<->,>=latex]  (1.5,{\y/2}) -- (2,{\y/2}) node[midway,above] {$\tau$};
+\draw[thin] (1.5,-0.05) -- (1.5,-1); \draw[thin] (3.5,-0.05) -- (3.5,-1);
+\draw[thin,<->,>=latex] (1.5,-0.85) -- (3.5,-0.85) node[midway,above] (A) {$T_k$};
+\draw[<-,>=latex,thin] (A.south) --++ (0.3,-0.5) node[below right] {период коммутации, $f_k$ -- частота коммутации ${\displaystyle T_k = \frac{1}{f_k}}$};
+\end{tikzpicture}
+
+Меряем прибором магнитооптической системы.
+
+Регулировочная характеристика понижающего ИППН:
+$$
+U_\textcyrillic{вых.} = \frac{\tau}{T_k} U_\textcyrillic{пит.} = \tau f_k U_\textcyrillic{пит.}
+$$
+
+Если активная нагрузка -- почти всё хорошо.
+
+Если менять $\frac{\tau}{T_k} = 0...1$, то так же меняется $U_\textcyrillic{вых.}$
+
+Но нагрузка может быть обмотка возбужения. Нужно включать фильтр. Если включить емкость -- плохо, для тиристоров большие броски тока. Значит нужна индуктивность.
+
+\begin{tikzpicture}
+\draw (0,2) to[Ty-,l={$V_s$},o-] (3,2) to[L] (5,2) to[R,l_={$R_\textcyrillic{н}$}] (5,0) to[short,-o] (0,0);
+\draw (0,1) node {$U_\textcyrillic{пит.}$};
+\draw (3,0) to[D-,l_={$V_D$}] (3,2);
+\newcommand{\RC}{1.55}
+\newcommand{\RO}{(\RC+0.2)}
+\draw[->,>=latex,dashed] ({4+\RC*cos(120)},{1+\RC*sin(120)}) arc (120:-205:\RC);  
+\draw[->,>=latex,dashed] (2.7,{1+\RO}) -- ({4},{1+\RO}) arc (90:-90:{\RO}) -- (1,{1-\RO}); 
+%\draw (3.4,2) node {$+$};
+%\draw (3.4,0) node {$-$};
+\draw[<-,>=latex] ({4+\RC*cos(-5)},{1+\RC*sin(-5)}) --++ (2,-0.3) node[right] {ключ открыт}; 
+\draw[<-,>=latex] ({4+\RO*cos(-15)},{1+\RO*sin(-15)}) --++ (2,-0.8) node[right] {ключ закрыт}; 
+\end{tikzpicture}
+
+$V_D$ -- шунтирует нагрузку.
+
+Напряжение практически не изменится. Изменится ток $\frac{U_\textcyrillic{пит.}}{R_\textcyrillic{н}}$. Индуктивность сгладит ток.
+
+\begin{tikzpicture}
+\draw[->,>=latex] (0,0) -- (0,2) node[right] {$U$};
+\draw[->,>=latex] (0,0) -- (8,0) node[right] {$\omega t$};
+\newcommand{\y}{1.8}
+\newcommand{\delt}{0.8}
+\foreach \x in {2,4,6}
+   \draw ({\x-\delt},0.1) -- ({\x-\delt},{\y}) -- ({\x},{\y}) -- ({\x},0.1) -- ({2+\x-\delt},0.1);
+\draw[domain=2:{4-\delt}]
+  plot({\x},{\y*0.8*exp(-0.3*(-2+\x))});
+\draw[domain={4-\delt}:7.5,dashed]
+  plot({\x},{\y*0.8*exp(-0.3*(-2+\x))});
+%\newcommand{\xo}{\y*0.8*exp(-0.3*(-2+4-\delt))}
+\draw[domain={4-\delt}:4]
+ plot({\x},{2. - exp(-0.3*(-4+\delt+\x)))});
+\draw[domain=4:7,dashed]
+ plot({\x},{2. - exp(-0.3*(-4+\delt+\x)))}); 
+\draw[domain=4:{6-\delt}]
+  plot({\x},{\y*0.675*exp(-0.3*(-4+\x))}); 
+\draw[domain={6-\delt}:7.5,dashed]
+  plot({\x},{\y*0.675*exp(-0.3*(-4+\x))});
+\draw[domain={6-\delt}:6]
+ plot({\x},{1.85 - exp(-0.3*(-6+\delt+\x)))});
+\draw[domain={6:7},dashed]
+ plot({\x},{1.85 - exp(-0.3*(-6+\delt+\x)))});
+\draw[domain=6:7.5]
+  plot({\x},{\y*0.77*exp(-0.3*(-6+\delt+\x))});
+\draw[dotted] (0.5,1) -- (7.8,1) node[right] {$U_D$ -- среднее значение на нагрузке};
+
+\draw[<-,>=latex] ({2-\delt/2},{\y}) --++ (-0.5,0.5) node[above] {$U_{V_D}$};
+\draw[<-,>=latex] ({4-\delt/2},{2. - exp(-0.3*(\delt/2))}) --++ (-0.3,1.2) node[above] {$U_\textcyrillic{нагрузки}$};
+\draw[<-,>=latex] ({(2+(4-\delt))/2},0.1) --++ (0.5,-0.5) node[below] {падение на диоде мало}; 
+\end{tikzpicture}
+
+$U_{V_D}$ --запирает диод.
+
+Отрицательного напряжения нет, преобразователь одноквадрантный. Чем плох одноквадрантный? Если нужно увеличить -- увеличиваем $\tau$. А если нужно
+уменьшить $\tau=0$ -- процесс пойлет по экспоненте.
+
+$L$ -- может быть или фильтр или входить в нагрузку.
+
+До 100 кГц работают приборы.
+
+$T_\textcyrillic{эм.} = \frac{L}{R} $ -- электромагнитная постоянная времени цепи. 
+
+Амплитуда пульсаций уменьщается при увеличении $L$ или при увеличении $f_n$ частоты.
+
+$$
+Ri + L\frac{\partial i}{\partial t} = E(t)
+$$
+
+$(3-4) T_\textcyrillic{эл.магнитное} = \scriptstyle{\Delta} i_\textcyrillic{спадения тока}$
+
+Для того чтобы ускорить спадение -- нужно работать в двух-квадрантном ИППН
+
+\section{двух-квадратный ИППН}
+\begin{tikzpicture}
+\draw (0,3) to[Ty-,l={$V_{S_1}$},o-] (5,3) to[L,l={$L_\textcyrillic{н}$}] (5,1.5) to[R,l={$R_\textcyrillic{н}$}] (5,0);
+\draw (5,0) to[Ty-,l={$V_{S_2}$},-o]  (0,0);
+\draw (4,0) -- (4,1) -- (3,2) to[D-,l_={$V_{D_1}$}] (1,2) to[short,-*] (1,3);
+\draw (1,0) to[short,*-] (1,1)  to[D-,l_={$V_{D_2}$}] (3,1) -- (4,2) -- (4,3);
+\end{tikzpicture}
+
+Нагрузкой может быть и ЭДС и электродвигатель. В общем случае L,R,E.
+
+\begin{tikzpicture}
+\draw[->,>=latex] (0,-2) -- (0,3);
+\draw[->,>=latex] (0,0) -- (7,0) node[right] {$\omega t$};
+\newcommand{\y}{1.8}
+\newcommand{\delt}{0.8}
+\newcommand{\deltY}{0.5}
+\foreach \x in {0,2,4} {
+\draw ({\x},{\y+\deltY}) -- ({\x},{-\y+\deltY}) -- ({\x+\delt},{-\y+\deltY})  -- ({\x+\delt},{\y+\deltY}) -- ({\x+2},{\y+\deltY});
+}
+\draw[dotted] (0,{\deltY}) -- (6,{\deltY}) node[right] {среднее напряжение на нагрузке};
+\path[->,>=latex]  ({1.8+\delt},{2.3+\deltY}) node[above] {$U_\textcyrillic{нагрузки}$} edge[bend right=20] ({2+\delt},1.6); 
+
+\draw[<->,>=latex,thin] (({\delt},{(\y+\deltY)/2}) -- ((2,{(\y+\deltY)/2}) node[midway,above] {$\tau$};
+\draw ({(2+\delt+4)/2},{(\y+\deltY)/2}) node {$+$};
+\draw ({(4 + 4+\delt)/2},{(-\y+\deltY)/2}) node {$-$};
+\end{tikzpicture}
+
+$\tau$ -- когда оба тиристора включены. Выключил -- ток в индуктивности. работает ЭДС индукции. Какой ток был такой и остается в первый момент.
+
+
+\begin{tikzpicture}
+%\draw (0,3) -- (1,3);
+%\draw  to[L,l={$L_\textcyrillic{н}$}] (5,1.5) to[R,l={$R_\textcyrillic{н}$}] (5,0);
+%\draw (5,0) to[Ty-,l={$V_{S_2}$},-o]  (0,0);
+%\draw (4,0) -- (4,1) -- (3,2) to[D-,l_={$V_{D_1}$}] (1,2) to[short,-*] (1,3);
+\draw (0,0) to[short,o-] (1,0) -- (1,1)  to[D-,l_={$V_{D_2}$}] (3,1) -- (4,2) -- (4,3) -- (5,3)  to[L,l={$L_\textcyrillic{н}$}] (5,1.5) to[R,l={$R_\textcyrillic{н}$}] (5,0) -- (4,0) -- 
+(4,1) -- (3,2) to[D-,l_={$V_{D_1}$}] (1,2) -- (1,3) to[short,-o] (0,3);
+\path[->] (0,0.3) edge[bend left=20]  node[midway,left] {теперь ток течет так} (0,2.7);
+\end{tikzpicture}
+
+Тиристоры включены -- энергия из источника питания передается в нагрузку.\\
+Тиристоры выключены -- энергия из нагрузки передается в источник питания.
+
+Когда включены тиристоры \begin{tikzpicture}\draw (0,0) ellipse (7mm and 3mm) node {$+$ $-$};\end{tikzpicture} источника подключены к \begin{tikzpicture}\draw (0,0) ellipse (7mm and 3mm) node {$+$ $-$};\end{tikzpicture} нагрузки.
+Когда выключены тиристоры \begin{tikzpicture}\draw (0,0) ellipse (7mm and 3mm) node {$+$ $-$};\end{tikzpicture} источника подключены к \begin{tikzpicture}\draw (0,0) ellipse (7mm and 3mm) node {$-$ $+$};\end{tikzpicture} нагрузки.
+
+
+% https://msd.com.ua/elektroprivoda-metallorezhushhix-stankov/tipovye-rezhimy-raboty-elektroprivoda/
+
+Регулировочная характеристика двухквадрантного ИППН
+
+$$
+U_d = \frac{\tau U_\textcyrillic{пит.} - (T_k - \tau)U_\textcyrillic{пит.}}{T_k} = \left( \frac{2\tau}{T_k} - 1\right)U_\textcyrillic{пит.}
+$$
+
+Если $\tau =\frac{T_k}{2}$, то $U_d = 0$. Если $\tau < \frac{T_k}{2}$  -- появляется отрицательное напряжение -- IV квадрант
+
+Число полупроводниковых приборов выросло вдвое.
+
+\begin{tikzpicture}
+\draw[->,>=latex,thin] (0,-2.7) -- (0,3) node[right] {${\displaystyle \frac{U_\textcyrillic{н}}{U_\textcyrillic{пит.}}}$};
+\draw[->,>=latex,thin] (0,0) -- (7,0) node[right] {${\displaystyle \frac{\tau}{T_k}}$}; 
+\draw (0,0) -- (5,2.5);
+\draw (0,-2.5) -- (5,2.5);
+\draw[thin] (0.05,2.5) -- (-0.05,2.5) node[left] {1};
+\draw[thin] (0.05,-2.5) -- (-0.05,-2.5) node[left] {-1};
+\draw[<-,thin,>=latex] (4.5,2) -- (5.5,2) node[right] {двухквадрантный};
+\path[thin,<-,>=latex] (4.5,2.25) edge[bend left=20] node[above right=2mm and 5mm] {одноквадрантный} (5.5,3.2) ;
+\end{tikzpicture}
+
+Возьму электромагнитный прибор, меряющий среднеквадратичное
+
+$$
+X= \sqrt{\frac{1}{T} \int\limits_{0}^{T} X^2(t) dt}
+$$
+
+Есть средне-квадратичное, $n$-й степени
+
+$$
+X^n_\textcyrillic{ср.}= \sqrt{\frac{1}{T} \int\limits_{0}^{T} X^n(t) dt}
+$$
+
+Для среднего $n=1$ не нужно брать корня
+
+$X^n$ находят применения в статистических расчетах, в фильтрах.
+
+$$
+\overline{X^2}  = U_\textcyrillic{пит.}\!
+$$
+-- при любых $\tau$ оно не меняется для двухквадрантного.
+
+Для одноквадрантного 
+$$
+\overline{U^2} = \sqrt{\frac{\tau}{T}}\cdot U_\textcyrillic{пит.}
+$$
+
+Для чего среднеквадратичное -- греем паяльник. Двухквадрантным не удастся регулировать лампочку. Лампочка будет гореть постоянно $\sqrt{f^2}$.
+
+Оценим пульсации
+
+\begin{tikzpicture}
+\draw[->,>=latex] (0,-2) -- (0,3);
+\draw[->,>=latex] (0,0) -- (7,0) node[right] {$\omega t$};
+\newcommand{\y}{1.8}
+\newcommand{\delt}{0.8}
+\newcommand{\deltY}{0.5}
+\foreach \x in {0,2,4} {
+\draw ({\x},{\y+\deltY}) -- ({\x},{-\y+\deltY}) -- ({\x+\delt},{-\y+\deltY})  -- ({\x+\delt},{\y+\deltY}) -- ({\x+2},{\y+\deltY});
+}
+	\draw[dotted] (0,{\deltY}) -- (6,{\deltY}) node[right] {$U_\textcyrillic{н}$ ($U_\textcyrillic{н}$ большое)};
+%\path[->,>=latex]  ({1.8+\delt},{2.3+\deltY}) node[above] {$U_\textcyrillic{нагрузки}$} edge[bend right=20] ({2+\delt},1.6);
+
+%\draw[<->,>=latex,thin] (({\delt},{(\y+\deltY)/2}) -- ((2,{(\y+\deltY)/2}) node[midway,above] {$\tau$};
+%\draw ({(2+\delt+4)/2},{(\y+\deltY)/2}) node {$+$};
+%\draw ({(4 + 4+\delt)/2},{(-\y+\deltY)/2}) node {$-$};
+\end{tikzpicture}
+
+${\displaystyle U = \frac{\tau}{T}}$ -- среднеквадратичное постоянного напряжения.
+
+$\overline{U^2_\textcyrillic{н}} = \sqrt{U^2_\textcyrillic{н} + U^2_{\textcyrillic{н}\sim}}$ -- из суммы квадратов всех гармоник
+
+$$
+U_{\textcyrillic{н}\sim} = \sqrt{U^2_\textcyrillic{н ср.кв.} - \underbrace{U^2_\textcyrillic{н}}_\textcyrillic{постоянная составляющая}} =
+$$
+$$
+=\sqrt{U^2_\textcyrillic{пит.} - U^2_\textcyrillic{пит.}\left(2\frac{\tau}{T_k} -1\right)^2} = U_\textcyrillic{пит.} \sqrt{-\left(2\frac{\tau}{T_k}\right)^2 + 2 \frac{2\tau}{T_k}} =
+$$
+$$
+= 2U_\textcyrillic{пит.} \sqrt{\left(\frac{\tau}{T_k}\right)\left(-\frac{\tau}{T_k} + 1\right)} - \textcyrillic{средне квадратичное значение переменной составлящей.}
+$$
+
+
+\begin{tikzpicture}
+\draw[->,>=latex,thin] (0,-2.7) -- (0,3) node[right] {${\displaystyle \frac{U_\textcyrillic{н}}{U_\textcyrillic{пит.}}}$};
+\draw[->,>=latex,thin] (0,0) -- (7,0) node[right] {${\displaystyle \frac{\tau}{T_k}}$};
+\draw (0,0) -- (5,2.5);
+\draw (0,-2.5) -- (5,2.5);
+\draw[thin] (0.05,2.5) -- (-0.05,2.5) node[left] {1};
+\draw[thin] (0.05,-2.5) -- (-0.05,-2.5) node[left] {-1};
+\newcommand{\x}{3.2}
+\path[->,thin,>=latex] (5,3) node[above right=7mm and 5mm] {двухквадрантный} edge[bend right=20] ({\x},{5*sqrt(\x/5*(1-\x/5))});
+\renewcommand{\x}{4.5}
+	\path[thin,->,>=latex] (5,{1.25-0.5})  node[above right=7mm and 5mm] {одноквадрантный} edge[bend right=20]  (4.5,{2.5*sqrt(\x/5*(1-\x/5))}) ;
+\draw[domain=0:5,samples=200,help lines, gray]
+	plot({\x},{2.5*sqrt(\x/5*(1-\x/5))});
+\draw[domain=0:5,samples=200,help lines, gray]
+        plot({\x},{5*sqrt(\x/5*(1-\x/5))});
+
+\draw[<-,>=latex,thin] (1,-1.5) --++ (1,-0.1) node[right] {$\overline{U}$};
+	\draw[<-,>=latex,thin] (2.5,1.25) --++ (1.5,-2) node[right] {совпадают $\overline{U}$ и $\overline{U^2}$};
+\end{tikzpicture}
+
+Для одноквадрантного ${\displaystyle U=\sqrt{\frac{\tau}{T_k}-\left(\frac{\tau}{T_k}\right)^2}}$ -- для двуквадрантного такая же формула, только без коэффициэнта 2.
+
+
+Работа возможна при одном направлении тока. При отрицательном напряжении -- рекуперация. $U\cdot I < 0$ -- ток течет из нагрузки в источник.
+Считал, что выпрямленный ток непрерывен.
+
+Что, если есть ЭДС нагрузки? При работе на активно-индуктивную нагрузку возникает противо-ЭДС. В обоих типах преобразователя возможен прерывистый режим преобразователя.
+Поэтому внешние характеристики преобразователя при малых токах нагрузки (в прерывистом режиме) становятся нелинейными, подобными характеристикам управляемых випрямителей.
+
+
+
