@@ -223,13 +223,18 @@ $U_\text{питания} = 100\text{ вольт}$, если нижний зап�
 
 Нужна ``синусоида'' напряжения. Разложим в ряд Фурье:
 
+%\begin{figure}[!ht]
 \begin{circuitikz}
   \draw (0,0) node[right] {$\displaystyle U_{(0)} = \frac{1}{2\pi}\int\limits_0^t U\;dt\;\cos\frac{\pi}{2\pi f} t$};
   \draw [<-,>=stealth'] (0.4,-0.3) -- (0, -1) node[below] {$\begin{array}{c}\text{основной}\\ \text{гармоники}\end{array}$};
 \end{circuitikz}
+%	\caption{ряд Фурье}
+%\end{figure}
 
 Если выбрать начало координат так, чтобы оставалась только косинусная составляющая
 
+
+\begin{figure}[!ht]
 \begin{circuitikz}
   \newcommand{\pp}{3.149265}
   \draw[thin,->,>=stealth'] (-2,0) -- (4,0);
@@ -238,6 +243,7 @@ $U_\text{питания} = 100\text{ вольт}$, если нижний зап�
   \draw[domain=-0.5:3.5, help lines,samples=200]
     plot (\x, {2*0.45*cos(\pp*\x r)});
 \end{circuitikz}
+\end{figure}
 
 $$
 U_{(\text{п})} = 0.45 U_\text{п}
@@ -247,26 +253,45 @@ $$
 
 Амплитуда гармоники 0.635 $(0.45\sqrt{2})$. Действующее значение $U_{(\text{п})} = $ в $n$ раз меньше, где $n$ -- весь ряд нечетных чисел, четных гармоник нет. Четные гармоники по разному искажают полуволны.
 
-\begin{wrapfigure}{l}{0.7\linewidth}
+\begin{figure}[!ht]
+%\begin{wrapfigure}{l}{0.7\linewidth}
 \begin{circuitikz}[yscale=1.3,samples=200]
   \draw[thin,->,>=stealth'] (-3.5,0) -- (3.5,0);
   \draw[domain=-3.14:3.14, help lines,smooth]  plot (\x,{-sin(\x r)});
   \draw[domain=-3.14:3.14, help lines, smooth] plot (\x,{.3*sin(3*\x r)});
   \draw[domain=-3.14:3.14] plot (\x,{-sin(\x r) + .3*sin(3*\x r)});
 \end{circuitikz}
-\end{wrapfigure} форма обеих полуволн искажается одинаково.
-\vspace{1.5cm}
-\begin{wrapfigure}{l}{0.7\linewidth}
+%\end{wrapfigure} 
+%\caption{форма обеих полуволн искажается одинаково.}
+\parформа обеих полуволн искажается одинаково.
+\end{figure}
+
+%\vspace{1.5cm}
+\begin{figure}[!ht]
+%\begin{wrapfigure}{l}{0.7\linewidth}
   \begin{circuitikz}[yscale=1.3,samples=200]
   \draw[thin,->,>=stealth'] (-1.7,0) -- (5,0);  
   \draw[domain=-1.57:4.71, help lines,smooth] plot (\x, {cos(\x r)});   
   \draw[domain=-1.57:4.71, help lines, smooth] plot (\x,{.5*cos(2*\x r)});
   \draw[domain=-1.57:4.71] plot (\x,{cos(\x r) + .5*cos(2*\x r)});
 \end{circuitikz}  
-\end{wrapfigure} по площади одинаково, но выглядит неодинаково
-\vspace{1cm}
+%\end{wrapfigure} 
+\par	по площади одинаково, но выглядит неодинаково
+%\vspace{1cm}
+\end{figure}
+
 На нашей кривой обе полуволны одинаковы, но появится постоянная составляющая. Но постоянная составляющая автоматически уничтожается. Ток заряда C будет идти до тех пор, пока не исчезнет постоянная составляющая.
 
-%\begin{tabuar}{cc}
-%	1 & 1 \\
-%\end{tabular}	
+\begin{figure}[!ht]
+%\begin{figure}[!ht]
+\begin{circuitikz} 
+\draw[domain=0:3.14,red, samples=200] plot (\x, {sin(\x r) + .3*sin(3*\x r)});
+\end{circuitikz}
+%\end{figure}
+\par 3-я гармоника, на полуволне - 3 гармоники
+\end{figure}
+
+\begin{tabular}{cc}
+3-я гармоника	 & 33\% \\
+	5-я гармоника & 20 \% \\
+\end{tabular}	
