@@ -1,0 +1,37 @@
+\section{однофазный мостовой АИН}
+\ctikzset{tripoles/Lnigbt/height=1.4}
+\ctikzset{tripoles/Lnigbt/width=0.8}
+\begin{circuitikz}
+	\foreach \x\y\NN in {0/3.75/1, 0/1.25/2, 4/3.75/3, 4/1.25/4} {
+	\draw ({\x},{\y}) node[Lnigbt,bodydiode,label={[above left=0.05cm and 0.5 cm]\tiny{VT\NN}}] (vt\NN) {} 
+		       node[label={[above right=-0.2cm and 0.3 cm]\tiny{VD\NN}}] {};
+	}
+
+	\draw (vt1.source) -- (vt2.drain) node[midway] (LoadL) {};
+	\draw (vt3.source) -- (vt4.drain) node[midway] (LoadR) {};
+	\node (LoadC) at ($(LoadL)!0.5!(LoadR)$) {};
+
+	\draw (LoadL) to[R,l={$R_\textcyrillic{н}$},*-] (LoadC) to[L,l={$L_\textcyrillic{н}$},-*] (LoadR);
+
+
+	\draw[dashed] (barycentric cs:vt1={0.9*0.3},vt2={0.9*0.7},vt3={0.1*0.3},vt4={0.1*0.7}) -- 
+	(barycentric cs:vt1={0.1*0.3},vt2={0.1*0.7},vt3={0.9*0.3},vt4={0.9*0.7}) -- 
+	(barycentric cs:vt1={0.1*0.8},vt2={0.1*0.2},vt3={0.9*0.8},vt4={0.9*0.2}) --
+	(barycentric cs:vt1={0.9*0.8},vt2={0.9*0.2},vt3={0.1*0.8},vt4={0.1*0.2}) -- cycle;
+	
+%        \path let \p1 = (vt1.drain) in node  at (-2, \y1) {B};
+	\draw ([xshift=-4.5cm]vt1.drain) -- (vt3.drain);
+	\draw ([xshift=-4.5cm]vt2.source) -- (vt4.source);
+	\draw ([xshift=-2.1cm]vt1.drain) to[R,l=\tiny{R1}] ([xshift=-2.1cm]LoadL) to[R,l=\tiny{R2}] ([xshift=-2.1cm]vt2.source);
+	\draw ([xshift=-2.8cm]vt1.drain) to[C,l_=\tiny{C1}] ([xshift=-2.8cm]LoadL) to[C,l_=\tiny{C2}] ([xshift=-2.8cm]vt2.source);
+	\draw ([xshift=-2.8cm]LoadL.center) to[short,*-*] ([xshift=-2.1cm]LoadL.center);
+                        
+	\draw[<-,>=latex] (-0.2, 2.4) -- (-1.3,-0.5) node[below] {ноль не подключен};
+\end{circuitikz}
+
+Мостовая схема состоит из двух нулевых. Напряжение на нагрузке в 2 раза больше чем в нулевой. Лучше используется источник питания. Форма напряжения и токов одинакова с нулевой схемой.
+
+Напряжения гармоник $U_{(n)} = \frac{2\sqrt{2}}{\pi(2k-1)}U_\textcyrillic{п} \Rightarrow U_1 = \frac{2\sqrt{2}}{\pi}U_\textcyrillic{п} $.
+
+Стоимость СПП $\approx$ току.
+Надо экономить ток. Если взяли СПП -- получите максимальное напряжение.

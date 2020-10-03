@@ -1,0 +1,73 @@
+\documentclass[a4paper,11pt]{report}
+\usepackage[T1,T2A]{fontenc}
+\usepackage{ucs}
+\usepackage[utf8x]{inputenc}
+\usepackage{latexsym}
+%\usepackage{amsmath}
+%\usepackage{mathtext}
+\usepackage{amssymb}
+\usepackage[english,ukrainian,russian]{babel}
+\usepackage{tikz}
+\usepackage{siunitx}
+\usetikzlibrary{patterns}
+\usetikzlibrary{positioning}
+\usetikzlibrary{decorations.text}
+\usetikzlibrary{decorations.pathmorphing}
+\usepackage[american,cuteinductors,smartlabels]{circuitikz}
+\usepackage{enumitem}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{graphicx}
+\graphicspath{{./images/}}
+\usepackage{hyperref}
+\usepackage{cancel}
+\usepackage{pgfplots}
+% http://www1.combinatorics.org/Information/article.html
+\author{ Прокшин Артем \\
+\small ЛЭТИ\\
+\small \texttt{taybola@gmail.com}}
+
+\usetikzlibrary{calc}
+\ctikzset{bipoles/thickness=1}
+\ctikzset{bipoles/length=0.8cm}
+\ctikzset{bipoles/diode/height=.375}
+\ctikzset{bipoles/diode/width=.3}
+\ctikzset{tripoles/thyristor/height=.8}
+\ctikzset{tripoles/thyristor/width=1}
+\ctikzset{bipoles/vsourceam/height/.initial=.7}
+\ctikzset{bipoles/vsourceam/width/.initial=.7}
+\tikzstyle{every node}=[font=\small]
+\tikzstyle{every path}=[line width=0.8pt,line cap=round,line join=round]
+
+\AddEnumerateCounter{\Asbuk}{\@Asbuk}{\CYRM}
+\AddEnumerateCounter{\asbuk}{\@asbuk}{\cyrm}
+\renewcommand{\theenumi}{(\asbuk{enumi})}
+\renewcommand{\labelenumi}{\asbuk{enumi})}
+
+%\title{Силовая энергетика}
+%\date{}
+\begin{document}
+\tikzset{component/.style={draw,thick,circle,fill=white,minimum size =0.75cm,inner sep=0pt}}
+%http://tex.stackexchange.com/questions/132076/how-to-draw-a-dc-motor-in-circuitikz
+
+\include{motor}
+
+%\maketitle
+
+%\begin{abstract}
+%\end{abstract}
+%\include{lection1}
+%\include{lection2}
+%\include{lection3}
+%\include{lection3a}
+%\include{real_lection5a}
+%\include{real_lection5b}
+%\include{real_lection5c} 
+%\include{real_lection6a}
+%\include{real_lection7a}
+%\include{real_lection7b}
+%\include{real_lection8a}
+%\include{real_lection11a}
+\include{real_lection13a}
+%\include{lection4}
+\end{document}
