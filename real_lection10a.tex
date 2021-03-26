@@ -294,7 +294,7 @@ $$
 
 \begin{tikzpicture}
 \draw[->,>=latex] (0,0) -- (6,0) node[right] {};	
-\draw[->,>=latex'] (0,-2.5) -- (0,3);
+\draw[->,>=latex] (0,-2.5) -- (0,3);
 \draw[name path=eclipse 1, loosely dashed] (0,-2) arc(-90:90:1 and 2);
 	\path[name path=line 1] (0,1) -- (5,0);
 	\draw[name intersections={of=eclipse 1 and line 1}] (5,0) -- (intersection-1);
@@ -313,7 +313,7 @@ $$
 
 \begin{tikzpicture}
 \draw[->,>=latex] (0,0) -- (6,0) node[right] {};
-\draw[->,>=latex'] (0,-2.5) -- (0,3);
+\draw[->,>=latex] (0,-2.5) -- (0,3);
 \draw[name path=eclipse 1, loosely dashed] (0,-2) arc(-90:90:1 and 2);
         \path[name path=line 1] (0,1) -- (5,0);
         \draw[name intersections={of=eclipse 1 and line 1}] (5,0) -- (intersection-1);
@@ -397,7 +397,7 @@ $
        \draw (1.26,0.2) node {$-$};
         \draw (1.26,0.75) node {$-$};
         \draw (1.25,1.2) node {$-$};
-	\draw[<-,>=latex'] (1.03,1.6) --++ (0.5,0.8) node[left] {Лист};
+	\draw[<-,>=latex] (1.03,1.6) --++ (0.5,0.8) node[left] {Лист};
 \end{tikzpicture}
 
 Разводим проводники и ...
